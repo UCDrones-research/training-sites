@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<?php 
+	require_once 'functions.php';
+
+	//for debugging only, turn off in production
+	// ini_set('display_errors', 1);
+	// ini_set('display_startup_errors', 1);
+	// error_reporting(E_ALL);
+
+	//AJAX for dynamic page
+	
+echo <<<_END
+	<script>
+                function setQueries(json){
+                    json = JSON.parse(json);
+                    document.getElementById("flightRestrictionInfo").innerHTML = "Max Altitude" + json.max_altitude;
+                    
+                }
+		function O(obj) {
+		  	if (typeof obj === 'object') 
+		  		return obj;
+		  	else 
+		  		return document.getElementById(obj);
+		}
+		function S(obj) {
+		  	return O(obj).style;
+		}
+		function C(name) {
+		  	var elements = document.getElementsByTagName('*');
+		  	var objects  = [];
+		  	for (var i = 0; i < elements.length; ++i)
+		    	if (elements[i].className === name)
+		      		objects.push(elements[i]);
+		  	return objects;
+		}
+		function getLaws(country){
+                    
+                    if (location.value === '') {
+			O('info').innerHTML = '';
+			return;
+                    }
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function() {
+                            if (this.readyState === 4 && this.status === 200) {
+                                
+                               setQueries(this.responseText);
+                               
+                            }
+                    };
+                    
+                        xmlhttp.open("GET", "getLaws.php?country=" + country, true);
+                        xmlhttp.send();
+                    
+		}
+                
+		function ajaxRequest() {
+			try { var request = new XMLHttpRequest() }
+			catch(e1) {
+				try { request = new ActiveXObject("Msxml2.XMLHTTP") }
+				catch(e2) {
+					try { request = new ActiveXObject("Microsoft.XMLHTTP") }
+					catch(e3) {
+						request = false
+					} 
+				} 
+			}
+			return request
+		}
+	</script>
+_END;
+?>
+    
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <title>International UAS Laws</title>
+
+<link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="manifest" href="site.webmanifest">
+<meta name="msapplication-TileColor" content="#616161">
+<meta name="theme-color" content="#ffffff">
+
+  <script>
+        var dojoConfig = {
+        has: {
+             "esri-featurelayer-webgl": 1
+        }
+        };
+    </script>
+  
+  
+  <script src="https://js.arcgis.com/4.8/"></script>
+  <script>
+	require([
+	  "esri/tasks/Locator",
+	  "esri/Map",
+	  "esri/views/MapView",
+	  "esri/widgets/Search",
+	  "esri/layers/FeatureLayer",
+	  "esri/widgets/Legend",
+	  "dojo/on",
+	  "dojo/domReady!",
+          "dojo/dom"
+
+	], function(Locator, Map, MapView, Search, FeatureLayer, Legend, on, dom){
+		
+		var countryTemplate = {
+			title: "{NAME}",
+			content: ""
+		};
+		
+		
+		var defaultSym = {
+			type: "simple-fill", // autocasts as new SimpleFillSymbol()
+			outline: { // autocasts as new SimpleLineSymbol()
+				color: "lightgray",
+				width: 0.5
+			}
+		};
+		
+		var yesSym = {
+			type: "simple-fill", 
+			color: "salmon"
+                };
+
+                var noSym = {
+                                type: "simple-fill",
+                                color: "cornflowerblue"
+                };
+		
+		var renderer = {
+			type: "unique-value", // autocasts as new SimpleRenderer()
+			defaultSymbol: defaultSym,
+			defaultLabel: "No data",
+			label: "Drone Regulations",
+			field: "Drone_Reg",
+			uniqueValueInfos: [
+			{
+				value: 1,
+				symbol: yesSym,
+				label: "Yes"
+			},{
+				value: 0,
+				symbol: noSym,
+				label: "No"
+			}]
+		};
+		var countries = new FeatureLayer({
+			url: "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Countries_Data/FeatureServer",
+			outFields: ["*"],
+			popupTemplate: countryTemplate,
+			renderer: renderer
+
+        });
+		var map = new Map({
+			basemap: "gray",
+			layers: [countries]
+		});
+	 
+		var view = new MapView({
+			container: "viewDiv",  // Reference to the scene div
+			map: map,  // Reference to the map object created before the scene
+			zoom: 5,  // Sets zoom level based on level of detail (LOD)
+			center: [-120.425558, 37.363572],  // Sets center point of view using longitude,latitude
+                        constraints: {
+					rotationEnabled: false
+				}
+		});
+		var sources = [
+		{
+			locator: new Locator({ url: "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer" }),
+			singleLineFieldName: "SingleLine",
+			name: "Custom Geocoding Service",
+			localSearchOptions: {
+				minScale: 300000,
+				distance: 50000
+			},
+			placeholder: "Search Geocoder",
+			maxResults: 3,
+			maxSuggestions: 6,
+			suggestionsEnabled: false,
+			minSuggestCharacters: 0
+		}, countries];
+		
+		var searchWidget = new Search({
+                        container: "searchWidget",
+			view: view,
+			popupTemplate: ["*"],
+			popupOpenOnSelect: false,
+			popupEnabled: true
+		});
+		
+                view.ui.move([ "zoom" ], "bottom-left");
+                
+		view.ui.add(searchWidget, {
+			position: "top-left"
+			
+		});
+                
+		var legend = new Legend({
+			view: view,
+                        container: "legend",
+			layerInfos: [
+			{
+				layer: countries,
+                                title: ""
+			}],
+                        style: "classic"
+                        });
+                        
+		O("variable").onchange  = function replaceVar() {
+			var variable = O("variable").value;
+			renderer.field = variable;
+                        countries.renderer = renderer;
+			view.ui.add(legend, "top-left");
+		};
+
+		view.ui.add(legend, "top-left");
+		
+		view.popup.dockOptions.position = "top-right";
+                
+		var handle = view.watch('popup.features', function(newValue, oldValue, property, object){
+			
+                            if(newValue !== null && newValue.length >= 1) {
+				var features = newValue;
+				var country = "";
+				//console.log(features);
+				for(i = 0; i < features.length; i++) {
+                                    
+					if(features[i].attributes.Drone_Reg !== null) {
+						//console.log("calling setUASReg with " + features[i].attributes.Drone_Reg);
+						setUASReg(features[i].attributes.Drone_Reg);
+                                                country=features[i].attributes.NAME;
+                                                //console.log(country);
+					}
+                                    
+				}
+                                O("flightRestrictionInfo").style.display = 'inherit';    
+                                getLaws(country);
+			}
+			
+		});
+		
+		function setUASReg(Drone_Reg) {
+			if(Drone_Reg === 1)
+				O("info").innerHTML = '<p>UAS regulations exist in this country.</p>';
+			else
+				O("info").innerHTML = '<p>UAS regulations do not exist in this country.</p>';
+		}
+		
+		var closePopup = view.watch('popup.visible', function(newValue, oldValue, property, object){
+			if(!newValue) {
+				O("flightRestrictionInfo").style.display = "none";
+			}
+		});
+		
+	});
+
+  </script>
+
+</head>
+
+<body>
+  <div id="viewDiv" class="col-xs-12 col-sm-6 col-lg-8">
+      <div id ="legend"></div>
+      <div id ="searchWidget"></div>
+  </div>
+  <div id="textDiv" class="col-xs-12 col-sm-6 col-lg-4">
+	<h1>Regulations</h1>
+	
+	
+		<!--<input name="variable" id="variable">-->
+		<h4>View by:</h4>
+		<select id="variable">
+			<option value="Drone_Reg">Regulations exist</option>
+			<option value="Registr_Rq">Registration required</option>
+		</select>
+	
+	<h3 class="heading" id="CountryHeading" style="display: none">Country</h3>
+	<h5 id="Country" style="display: none"></h5>
+        <h5 id="flightRestrictionInfo" style="display: none"></h5>
+	<!--h5 id="auth" style="display: none"></h5>
+	<h5 id="nps" style="display: none"></h5>
+	<h5 id="wilderness" style="display: none"></h5-->
+	<div id="info">
+		Click a location on the map to view Country Regulations.
+	</div>
+  </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
