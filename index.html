@@ -139,13 +139,6 @@
 			}],
                         style: "classic"
                         });
-                       
-		O("variable").onchange  = function replaceVar() {
-			var variable = O("variable").value;
-			renderer.field = variable;
-                        countries.renderer = renderer;
-			view.ui.add(legend, "top-left");
-		};
 
 		view.ui.add(legend, "top-left");
 		
