@@ -148,7 +148,7 @@
 			}],
                         style: "classic"
                         });
-                        
+                       
 		O("variable").onchange  = function replaceVar() {
 			var variable = O("variable").value;
 			renderer.field = variable;
@@ -181,7 +181,7 @@
 			}
 			
 		});
-		  //.
+		
 		function setUASReg(Drone_Reg) {
 			if(Drone_Reg === 1)
 				O("info").innerHTML = '<p>UAS regulations exist in this country.</p>';
@@ -203,17 +203,10 @@
 
 
 <body>
-  <div id="viewDiv" >
+  <div id="viewDiv">
       <div id ="legend"></div>
       <div id ="searchWidget"></div>
   </div>
-
-	<h3 class="heading" id="CountryHeading" style="display: none">Country</h3>
-	<h5 id="Country" style="display: none"></h5>
-        <h5 id="flightRestrictionInfo" style="display: none"></h5>
-	<div id="info">
-		Click a location on the map to view Country Regulations.
-	</div>
   </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
