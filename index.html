@@ -72,6 +72,7 @@
 			}]
 		};
 
+
 		var map = new Map({
 			basemap: "satellite",
 			layers: []//countries]
@@ -87,7 +88,7 @@
 				}
 		});
 		var sources = [
-		{
+		{ //
 			locator: new Locator({ url: "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer" }),
 			singleLineFieldName: "SingleLine",
 			name: "Custom Geocoding Service",
