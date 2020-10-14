@@ -16,7 +16,7 @@
     <script>
       var map;
       require(["esri/map", "dojo/domReady!"], function(Map) {
-        map = new Map("map", {
+        map = new Map("viewDiv", {
           basemap: "satellite",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
           center: [-120.420165, 37.363572], // longitude, latitude
           zoom: 16
@@ -29,7 +29,7 @@
 
     <div id="main" class="container-fluid">
       <div id="menu" class="col-sm"></div>
-      <div id="map" class="col-sm"></div>
+      <div id="viewDiv" class="col-sm"></div>
     </div>
 
 
