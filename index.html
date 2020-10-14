@@ -14,14 +14,21 @@
     <script src="https://js.arcgis.com/3.34/"></script>
     
     <script>
-      var map;
-      require(["esri/map", "dojo/domReady!"], function(Map) {
-        map = new Map("viewDiv", {
-          basemap: "satellite",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+      //map object
+      var viewDiv;
+      
+      require(["esri/Map", "esri/views/MapView"], function(Map, MapView) {
+        var map = new Map({
+          basemap: "satellite"
+        });
+        var view = new MapView({
+          container: "viewDiv", // Reference to the view div created in step 5
+          map: map, // Reference to the map object created before the view
+          zoom: 4, // Sets zoom level based on level of detail (LOD)
           center: [-120.420165, 37.363572], // longitude, latitude
-          zoom: 16
         });
       });
+     
     </script>
 
   </head>
