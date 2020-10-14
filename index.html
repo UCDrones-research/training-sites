@@ -9,20 +9,22 @@
     <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
     <script src="https://js.arcgis.com/4.17/"></script>
     
-    <link href="css/style.css" rel="stylesheet">
+    <!--link href="css/style.css" rel="stylesheet"-->
     
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
    
     <script>
 
       require(["esri/Map", "esri/views/MapView"], function(Map, MapView) {
+
         var map = new Map({
           basemap: "satellite"
         });
+
         var view = new MapView({
           container: "viewDiv", // Reference to the view div created in step 5
           map: map, // Reference to the map object created before the view
-          zoom: 4, // Sets zoom level based on level of detail (LOD)
+          zoom: 12, // Sets zoom level based on level of detail (LOD)
           center: [-120.420165, 37.363572], // longitude, latitude
         });
       });
@@ -34,7 +36,7 @@
 
     <div id="main" class="container-fluid">
       <div id="menu" class="col-sm"></div>
-      <div id="viewDiv"></div>
+      <div id="viewDiv" class="col-sm"></div>
     </div>
 
 
