@@ -36,12 +36,6 @@
 
 	], function(Locator, Map, MapView, Search, FeatureLayer, Legend, on, dom){
 		
-		var countryTemplate = {
-			title: "{NAME}",
-			content: ""
-		};
-		
-		
 		var defaultSym = {
 			type: "simple-fill", // autocasts as new SimpleFillSymbol()
 			outline: { // autocasts as new SimpleLineSymbol()
@@ -77,13 +71,7 @@
 				label: "No"
 			}]
 		};
-		var countries = new FeatureLayer({
-			url: "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Countries_Data/FeatureServer",
-			outFields: ["*"],
-			popupTemplate: countryTemplate,
-			renderer: renderer
 
-        });
 		var map = new Map({
 			basemap: "satellite",
 			layers: []//countries]
@@ -128,57 +116,9 @@
 			position: "top-left"
 			
 		});
-                
-		var legend = new Legend({
-			view: view,
-                        container: "legend",
-			layerInfos: [
-			{
-				layer: countries,
-                                title: ""
-			}],
-                        style: "classic"
-                        });
-
-		view.ui.add(legend, "top-left");
 		
 		view.popup.dockOptions.position = "top-right";
-                
-		var handle = view.watch('popup.features', function(newValue, oldValue, property, object){
-			
-                            if(newValue !== null && newValue.length >= 1) {
-				var features = newValue;
-				var country = "";
-				//console.log(features);
-				for(i = 0; i < features.length; i++) {
-                                    
-					if(features[i].attributes.Drone_Reg !== null) {
-						//console.log("calling setUASReg with " + features[i].attributes.Drone_Reg);
-						setUASReg(features[i].attributes.Drone_Reg);
-                                                country=features[i].attributes.NAME;
-                                                //console.log(country);
-					}
-                                    
-				}
-                                O("flightRestrictionInfo").style.display = 'inherit';    
-                                getLaws(country);
-			}
-			
-		});
-		
-		function setUASReg(Drone_Reg) {
-			if(Drone_Reg === 1)
-				O("info").innerHTML = '<p>UAS regulations exist in this country.</p>';
-			else
-				O("info").innerHTML = '<p>UAS regulations do not exist in this country.</p>';
-		}
-		
-		var closePopup = view.watch('popup.visible', function(newValue, oldValue, property, object){
-			if(!newValue) {
-				O("flightRestrictionInfo").style.display = "none";
-			}
-		});
-		
+    
 	});
 
   </script>
