@@ -1,207 +1,32 @@
 <!DOCTYPE html>
-
 <html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+    <title>CalTrans Drone</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/3.34/esri/css/esri.css">
+    <style>
+      html, body, #map {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    <script src="https://js.arcgis.com/3.34/"></script>
+    <script>
+      var map;
 
-<head>
-    
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
-
-  <title>CalTrans Drone</title>
-
-<link rel="stylesheet" href="https://js.arcgis.com/4.8/esri/css/main.css">
-<meta name="theme-color" content="#ffffff">
-
-  <script>
-        var dojoConfig = {
-        has: {
-             "esri-featurelayer-webgl": 1
-        }
-        };
-    </script>
-  
-  
-  <script src="https://js.arcgis.com/4.8/"></script>
-  <script>
-	require([
-	  "esri/tasks/Locator",
-	  "esri/Map",
-	  "esri/views/MapView",
-	  "esri/widgets/Search",
-	  "esri/layers/FeatureLayer",
-	  "esri/widgets/Legend",
-	  "dojo/on",
-	  "dojo/domReady!",
-          "dojo/dom"
-
-	], function(Locator, Map, MapView, Search, FeatureLayer, Legend, on, dom){
-		
-		var countryTemplate = {
-			title: "{NAME}",
-			content: ""
-		};
-		
-		
-		var defaultSym = {
-			type: "simple-fill", // autocasts as new SimpleFillSymbol()
-			outline: { // autocasts as new SimpleLineSymbol()
-				color: "lightgray",
-				width: 0.5
-			}
-		};
-		
-		var yesSym = {
-			type: "simple-fill", 
-			color: "salmon"
-                };
-
-                var noSym = {
-                                type: "simple-fill",
-                                color: "cornflowerblue"
-                };
-		
-		var renderer = {
-			type: "unique-value", // autocasts as new SimpleRenderer()
-			defaultSymbol: defaultSym,
-			defaultLabel: "No data",
-			label: "Drone Regulations",
-			field: "Drone_Reg",
-			uniqueValueInfos: [
-			{
-				value: 1,
-				symbol: yesSym,
-				label: "Yes"
-			},{
-				value: 0,
-				symbol: noSym,
-				label: "No"
-			}]
-		};
-		var countries = new FeatureLayer({
-			url: "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/Countries_Data/FeatureServer",
-			outFields: ["*"],
-			popupTemplate: countryTemplate,
-			renderer: renderer
-
+      require(["esri/map", "dojo/domReady!"], function(Map) {
+        map = new Map("map", {
+          basemap: "satellite",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
+          center: [-120.420165, 37.363572], // longitude, latitude
+          zoom: 13
         });
-		var map = new Map({
-			basemap: "satellite",
-			layers: []//countries]
-		});
-	 
-		var view = new MapView({
-			container: "viewDiv",  // Reference to the scene div
-			map: map,  // Reference to the map object created before the scene
-			zoom: 16,  // Sets zoom level based on level of detail (LOD)
-			center: [-120.420165, 37.363572],  // Sets center point of view using longitude,latitude
-                        constraints: {
-					rotationEnabled: false
-				}
-		});
-		var sources = [
-		{
-			locator: new Locator({ url: "//geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer" }),
-			singleLineFieldName: "SingleLine",
-			name: "Custom Geocoding Service",
-			localSearchOptions: {
-				minScale: 300000,
-				distance: 50000
-			},
-			placeholder: "Search Geocoder",
-			maxResults: 3,
-			maxSuggestions: 6,
-			suggestionsEnabled: false,
-			minSuggestCharacters: 0
-		}, countries];
-		
-		var searchWidget = new Search({
-                        container: "searchWidget",
-			view: view,
-			popupTemplate: ["*"],
-			popupOpenOnSelect: false,
-			popupEnabled: true
-		});
-		
-                view.ui.move([ "zoom" ], "bottom-left");
-                
-		view.ui.add(searchWidget, {
-			position: "top-left"
-			
-		});
-                
-		var legend = new Legend({
-			view: view,
-                        container: "legend",
-			layerInfos: [
-			{
-				layer: countries,
-                                title: ""
-			}],
-                        style: "classic"
-                        });
+      });
+    </script>
+  </head>
 
-		view.ui.add(legend, "top-left");
-		
-		view.popup.dockOptions.position = "top-right";
-                
-		var handle = view.watch('popup.features', function(newValue, oldValue, property, object){
-			
-                            if(newValue !== null && newValue.length >= 1) {
-				var features = newValue;
-				var country = "";
-				//console.log(features);
-				for(i = 0; i < features.length; i++) {
-                                    
-					if(features[i].attributes.Drone_Reg !== null) {
-						//console.log("calling setUASReg with " + features[i].attributes.Drone_Reg);
-						setUASReg(features[i].attributes.Drone_Reg);
-                                                country=features[i].attributes.NAME;
-                                                //console.log(country);
-					}
-                                    
-				}
-                                O("flightRestrictionInfo").style.display = 'inherit';    
-                                getLaws(country);
-			}
-			
-		});
-		
-		function setUASReg(Drone_Reg) {
-			if(Drone_Reg === 1)
-				O("info").innerHTML = '<p>UAS regulations exist in this country.</p>';
-			else
-				O("info").innerHTML = '<p>UAS regulations do not exist in this country.</p>';
-		}
-		
-		var closePopup = view.watch('popup.visible', function(newValue, oldValue, property, object){
-			if(!newValue) {
-				O("flightRestrictionInfo").style.display = "none";
-			}
-		});
-		
-	});
-
-  </script>
-
-</head>
-
-
-<body>
-  <div id="viewDiv" class="full-height">
-      <div id ="legend"></div>
-      <div id ="searchWidget"></div>
-  </div>
-  </div>
-</body>
-
+  <body>
+    <div id="map"></div>
+  </body>
 </html>
-
-<style type="text/css">
-    html, body {
-  height: 100%;
-}
-
-.full-height {
-  height: 100%;
-}
-</style>
