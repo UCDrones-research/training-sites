@@ -16,7 +16,7 @@
     <script src="https://js.arcgis.com/4.17/"></script>
     <!-- font family -->
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <script>
         require([
             "esri/Map",
@@ -200,19 +200,40 @@
 
 
         });
+
+        var slider = document.getElementById("myRange");
+        var output = document.getElementById("demo");
+        output.innerHTML = slider.value; // Display the default slider value
+
+        // Update the current slider value (each time you drag the slider handle)
+        slider.oninput = function() {
+            output.innerHTML = this.value;
+        }
     </script>
 
 </head>
 
 <body>
 
+    <!-- <span class="material-icons">send</span> -->
+
     <main>
         <nav class="navbar">
+
+            <div class="collapsible">FAA Airspace Class</div>
+            <div class="content">
+                <span class="material-icons">arrow_circle_up</span>
+                <span class="material-icons">arrow_circle_down</span>
+                <div class="slidecontainer">
+                    <input type="range" min="1" max="400" value="200" class="slider" id="myRange">
+                </div>
+            </div>
+
             <div class="collapsible">Disctrict</div>
             <div class="content">
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
             </div>
-            <div class="collapsible">FAA Airspace Class</div>
+
             <div class="collapsible">FAA UAS Facility</div>
             <div class="collapsible">Caltrans Heliports</div>
             <div class="collapsible">Airports</div>
@@ -239,5 +260,6 @@
     </script>
 
 </body>
+
 
 </html>
