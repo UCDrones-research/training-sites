@@ -14,16 +14,94 @@
     <!--Custom Stylesheet-->
     <link href="css/style.css" rel="stylesheet">
     <script src="https://js.arcgis.com/4.17/"></script>
-    <!--Bootstrap 4 Stylesheet-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <!-- font family -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
 
     <script>
-        require(["esri/Map", "esri/views/MapView"], function(Map, MapView) {
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/FeatureLayer"
 
+        ], function(Map, MapView, FeatureLayer) {
+
+            var classAirspacerendered = {
+                type: "unique-value",
+                field: "LOWER_VAL",
+                field2: "LOCAL_TYPE",
+                fieldDelimiter: ", ",
+
+                defaultSymbol: {
+                    type: "simple-fill",
+                    style: "none",
+                    outline: { // autocasts as new SimpleLineSymbol()
+                        width: 0
+                    }
+                }, // autocasts as new SimpleFillSymbol()
+                uniqueValueInfos: [{
+                    value: "0, CLASS_E2",
+                    symbol: {
+                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                        color: "cyan",
+                        style: "none",
+                        outline: { // autocasts as new SimpleLineSymbol()
+                            color: "cyan",
+                            width: "2px"
+                        }
+                    }
+                }, {
+                    value: "0, CLASS_D",
+                    symbol: {
+                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                        color: "green",
+                        style: "none",
+                        outline: { // autocasts as new SimpleLineSymbol()
+                            color: "orange",
+                            width: "2px"
+                        }
+
+                    }
+                }, {
+                    value: "0, CLASS_C",
+                    symbol: {
+                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                        color: "purple",
+                        style: "none",
+                        outline: { // autocasts as new SimpleLineSymbol()
+                            color: "purple",
+                            width: "2px"
+                        }
+
+                    }
+                }, {
+                    value: "0, CLASS_B",
+                    symbol: {
+                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
+                        color: "yellow",
+                        style: "none",
+                        outline: { // autocasts as new SimpleLineSymbol()
+                            color: "yellow",
+                            width: "2px"
+                        }
+
+                    }
+                }]
+            };
+
+            var classAirspace = new FeatureLayer({
+                url: "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/ArcGIS/rest/services/Class_Airspace/FeatureServer/0",
+                outFields: ["*"],
+                //popupTemplate: classAirspaceTemplate,
+                visible: true,
+                renderer: classAirspacerendered,
+                opacity: 0.8,
+                definitionExpression: "LOCAL_TYPE='CLASS_E2' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_B' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_C' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_D' AND LOWER_VAL=0"
+
+            });
 
             var map = new Map({
-                basemap: "hybrid"
+                basemap: "hybrid",
+                layers: classAirspace
             });
 
             var view = new MapView({
@@ -35,37 +113,43 @@
 
 
         });
-
-        /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
-        function openNav() {
-            document.getElementById("mySidenav").style.width = "250px";
-            document.getElementById("viewDiv").style.marginLeft = "250px";
-        }
-
-        /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
-        function closeNav() {
-            document.getElementById("mySidenav").style.width = "0";
-            document.getElementById("viewDiv").style.marginLeft = "0";
-        }
     </script>
 
 </head>
 
 <body>
 
-    <div id="mySidenav" class="sidenav">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">About</a>
-        <a href="#">Services</a>
-        <a href="#">Clients</a>
-        <a href="#">Contact</a>
-    </div>
+    <main>
+        <nav class="navbar">
+            <div class="collapsible">Disctrict</div>
+            <div class="content">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+            <div class="collapsible">FAA Airspace Class</div>
+            <div class="collapsible">FAA UAS Facility</div>
+            <div class="collapsible">Caltrans Heliports</div>
+            <div class="collapsible">Airports</div>
+            <div class="collapsible">Military Airports</div>
+        </nav>
+        <div id="viewDiv" class="map_window"></div>
+    </main>
 
-    <!-- Use any element to open the sidenav -->
-    <span onclick="openNav()">open</span>
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
 
-    <!-- Add all page content inside this div if you want the side nav to push page content to the right (not used if you only want the sidenav to sit on top of the page -->
-    <div id="viewDiv"></div>
+        for (i = 0; i < coll.length; i++) {
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.maxHeight) {
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                }
+            });
+        }
+    </script>
 
 </body>
 
