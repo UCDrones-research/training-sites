@@ -1,32 +1,40 @@
 <!DOCTYPE html>
+
 <html>
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
-    <title>CalTrans Drone</title>
-    <link rel="stylesheet" href="https://js.arcgis.com/3.34/esri/css/esri.css">
-    <style>
-      html, body, #map {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-    <script src="https://js.arcgis.com/3.34/"></script>
-    <script>
-      var map;
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
 
-      require(["esri/map", "dojo/domReady!"], function(Map) {
-        map = new Map("map", {
-          basemap: "satellite",  //For full list of pre-defined basemaps, navigate to http://arcg.is/1JVo6Wd
-          center: [-120.420165, 37.363572], // longitude, latitude
-          zoom: 13
-        });
-      });
-    </script>
+    <title>CalTrans Drone</title>
+
+    <!--Arcgis Stylesheet-->
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <!--Custom Stylesheet-->
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="https://js.arcgis.com/4.17/"></script>
+    <!-- font family -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+
+    <!-- Map Javascript Content -->
+    <script type="text/javascript" src="scripts/map.js"></script>
   </head>
 
   <body>
-    <div id="map"></div>
+    <!-- <span class="material-icons">send</span> -->
+
+    <div id="viewDiv" class="map_window"></div>
   </body>
 </html>

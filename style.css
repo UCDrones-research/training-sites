@@ -1,0 +1,14 @@
+body {
+  color: black;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.map_window {
+  position: absolute;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  width: 80vw;
+}
