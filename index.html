@@ -15,26 +15,28 @@
       rel="stylesheet"
       href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
     />
+    <!-- Google Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <!--Custom Stylesheet-->
     <link href="css/style.css" rel="stylesheet" />
     <script src="https://js.arcgis.com/4.17/"></script>
-    <!-- font family -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
 
     <!-- Map Javascript Content -->
     <script type="text/javascript" src="scripts/map.js"></script>
   </head>
 
   <body>
-    <!-- <span class="material-icons">send</span> -->
-
-    <div id="viewDiv" class="map_window"></div>
+    <div id="content" class="wrapper">
+      <div id="header" class="top_header">
+        <i class="material-icons">face</i>
+      </div>
+      <div id="Map" class="map_window"></div>
+      <div id="DashBoard" class="dash_window"></div>
+    </div>
+    <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
   </body>
 </html>
