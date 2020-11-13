@@ -1,265 +1,53 @@
 <!DOCTYPE html>
 
 <html>
-
-<head>
-
+  <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="initial-scale=1, maximum-scale=1, user-scalable=no"
+    />
 
     <title>CalTrans Drone</title>
 
     <!--Arcgis Stylesheet-->
-    <link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+    />
+    <!-- Google Icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
     <!--Custom Stylesheet-->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet" />
     <script src="https://js.arcgis.com/4.17/"></script>
-    <!-- font family -->
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <script>
-        require([
-            "esri/Map",
-            "esri/views/MapView",
-            "esri/layers/FeatureLayer"
 
-        ], function(Map, MapView, FeatureLayer) {
+    <!-- Map Javascript Content -->
+    <script type="text/javascript" src="scripts/map.js"></script>
+  </head>
 
-            var classAirspacerendered = {
-                type: "unique-value",
-                field: "LOWER_VAL",
-                field2: "LOCAL_TYPE",
-                fieldDelimiter: ", ",
-
-                defaultSymbol: {
-                    type: "simple-fill",
-                    style: "none",
-                    outline: { // autocasts as new SimpleLineSymbol()
-                        width: 0
-                    }
-                }, // autocasts as new SimpleFillSymbol()
-                uniqueValueInfos: [{
-                    value: "0, CLASS_E2",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "cyan",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "cyan",
-                            width: "2px"
-                        }
-                    }
-                }, {
-                    value: "0, CLASS_D",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "green",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "orange",
-                            width: "2px"
-                        }
-
-                    }
-                }, {
-                    value: "0, CLASS_C",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "purple",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "purple",
-                            width: "2px"
-                        }
-
-                    }
-                }, {
-                    value: "0, CLASS_B",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "yellow",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "yellow",
-                            width: "2px"
-                        }
-
-                    }
-                }]
-            };
-
-            var uasFacilitiesRenderer = {
-                type: "unique-value",
-                field: "CEILING",
-                fieldDelimiter: ", ",
-
-                defaultSymbol: {
-                    type: "simple-fill",
-                    color: "blue",
-                    outline: { // autocasts as new SimpleLineSymbol()
-                        width: 0
-                    }
-                }, // autocasts as new SimpleFillSymbol()
-                uniqueValueInfos: [{
-                    value: "400",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "cyan",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "cyan",
-                            width: "2px"
-                        }
-                    }
-                }, {
-                    value: "200",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "green",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "orange",
-                            width: "2px"
-                        }
-
-                    }
-                }, {
-                    value: "100",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "purple",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "purple",
-                            width: "2px"
-                        }
-
-                    }
-                }, {
-                    value: "0",
-                    symbol: {
-                        type: "simple-fill", // autocasts as new SimpleFillSymbol()
-                        color: "yellow",
-                        style: "none",
-                        outline: { // autocasts as new SimpleLineSymbol()
-                            color: "yellow",
-                            width: "2px"
-                        }
-
-                    }
-                }]
-            };
-
-            var classAirspace = new FeatureLayer({
-                url: "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/ArcGIS/rest/services/Class_Airspace/FeatureServer/0",
-                outFields: ["*"],
-                //popupTemplate: classAirspaceTemplate,
-                visible: true,
-                renderer: classAirspacerendered,
-                opacity: 0.8,
-                definitionExpression: "LOCAL_TYPE='CLASS_E2' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_B' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_C' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_D' AND LOWER_VAL=0"
-
-            });
-
-            var uasFacilities = new FeatureLayer({
-                url: "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V3/FeatureServer/0/query?outFields=*&where=1%3D1",
-                outFields: ["*"],
-                //popupTemplate: classAirspaceTemplate,
-                visible: true,
-                renderer: uasFacilitiesRenderer,
-                opacity: 0.8,
-                definitionExpression: "CEILING='0' OR CEILING='50' OR CEILING='100' OR CEILING='200' OR CEILING='400'"
-
-            });
-
-            var CalTransDistrictBound = new FeatureLayer({
-                url: "https://gisdata.dot.ca.gov/arcgis/rest/services/Boundary/District_Tiger_Lines/MapServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json",
-                opacity: 0.5,
-                color: "yellow"
-
-            });
-
-            var CalTransCountyBound = new FeatureLayer({
-                url: "https://services.arcgis.com/BLN4oKB0N1YSgvY8/arcgis/rest/services/Counties_in_California/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json",
-                opacity: 0.5,
-                color: "red"
-            });
-
-
-            var map = new Map({
-                basemap: "hybrid",
-                layers: [classAirspace, uasFacilities, CalTransDistrictBound, CalTransCountyBound]
-            });
-
-            var view = new MapView({
-                container: "viewDiv", // Reference to the view div created in step 5
-                map: map, // Reference to the map object created before the view
-                zoom: 6, // Sets zoom level based on level of detail (LOD)
-                center: [-120.420165, 37.363572], // longitude, latitude
-            });
-
-
-        });
-
-        var slider = document.getElementById("myRange");
-        var output = document.getElementById("demo");
-        output.innerHTML = slider.value; // Display the default slider value
-
-        // Update the current slider value (each time you drag the slider handle)
-        slider.oninput = function() {
-            output.innerHTML = this.value;
-        }
-    </script>
-
-</head>
-
-<body>
-
-    <!-- <span class="material-icons">send</span> -->
-
-    <main>
-        <nav class="navbar">
-
-            <div class="collapsible">FAA Airspace Class</div>
-            <div class="content">
-                <span class="material-icons">arrow_circle_up</span>
-                <span class="material-icons">arrow_circle_down</span>
-                <div class="slidecontainer">
-                    <input type="range" min="1" max="400" value="200" class="slider" id="myRange">
-                </div>
-            </div>
-
-            <div class="collapsible">Disctrict</div>
-            <div class="content">
-
-            </div>
-
-            <div class="collapsible">FAA UAS Facility</div>
-            <div class="collapsible">Caltrans Heliports</div>
-            <div class="collapsible">Airports</div>
-            <div class="collapsible">Military Airports</div>
-        </nav>
-        <div id="viewDiv" class="map_window"></div>
-    </main>
-
-    <script>
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                if (content.style.maxHeight) {
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                }
-            });
-        }
-    </script>
-
-</body>
-
-
+  <body>
+    <div id="content" class="wrapper">
+      <div id="header" class="top_header">
+        <p>California Drone Training Sites</p>
+      </div>
+      <div id="Map" class="map_window"></div>
+      <div id="DashBoard" class="dash_window">
+        <div id = "navpane"></div>
+        <div id = "layers">
+          Layers
+          <p>FAA Airspace</p>
+          <p>FAA UAS Facility maps + SSI</p>
+          <p>Caltrans District</p>
+          <p>California County</p>
+          <p>Caltrans Aviation</p>
+        </div>
+        <!-- Side Pane Content -->
+      </div>
+    </div>
+    <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
+  </body>
 </html>
