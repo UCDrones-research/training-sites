@@ -1,93 +1,17 @@
+var max_Zoom_Out = 2400000;
+
+//https://developers.arcgis.com/javascript/latest/sample-code/widgets-layerlist-actions/index.html
+
 require([
   "esri/Map",
   "esri/Basemap",
   "esri/views/MapView",
   "esri/layers/FeatureLayer",
   "esri/geometry/Extent",
-  "esri/symbols",
-  "esri/widgets/Popup",
-
-], function (Map, Basemap, MapView, FeatureLayer, Extent, symbols, Popup) {
-  /*##########################################################           Pop-up Templates            ##########################################################*/
-  var classAirspaceTemplate = {
-    title: "{NAME}",
-    content: "<span id='airspaceClass'>Class {CLASS}</span>",
-  };
-
-  var flightRestrictionTemplate = {
-    title: "{Base}",
-    content: "No-Fly-Zone",
-  };
-
-  var FacilityMapTemplate = {
-    title: "Facility Map Ceiling - {CEILING}ft",
-    content: "Last Edit: {LAST_EDIT}",
-  };
-
-  /*##########################################################            Feature Layers            ##########################################################*/
-
-  var FRrenderer = {
-    type: "simple", // autocasts as new SimpleRenderer()
-    symbol: {
-      type: "simple-fill", // autocasts as new SimpleFillSymbol()
-      color: [255, 0, 0, 1],
-      outline: {
-        // makes the outlines of all features consistently light gray
-        color: "lightgray",
-        width: 0.5,
-      },
-    },
-  };
-
-  var defaultSym = {
-    type: "simple-fill", // autocasts as new SimpleMarkerSymbol()
-    outline: {
-      // autocasts as new SimpleLineSymbol()
-      color: "lightgray",
-      width: 0.5,
-    },
-  };
-
-  var Renderdiff = {
-    type: "simple-fill", // autocasts as new SimpleMarkerSymbol()
-    outline: {
-      // autocasts as new SimpleLineSymbol()
-      color: "red",
-      width: 0.6,
-    },
-  };
-
-  var FM_rend = {
-    type: "simple", // autocasts as new SimpleRenderer()
-    symbol: Renderdiff,
-    visualVariables: [
-      {
-        type: "color",
-        field: "CEILING",
-
-        stops: [
-          {
-            value: 0,
-            color: "000000",
-            label: "0 ft AGL",
-          },
-          {
-            value: 400,
-            color: "00FF00",
-            label: "400 ft AGL",
-          },
-        ],
-      },
-    ],
-  };
-
-  var flightRestrictions = new FeatureLayer({
-    url:
-      "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/DoD_Mar_13/FeatureServer/",
-    renderer: FRrenderer,
-    outFields: ["*"],
-    popupTemplate: flightRestrictionTemplate,
-  });
+  "esri/widgets/Expand",
+  "esri/widgets/LayerList",
+], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList) {
+  let siteLayerView;
 
   var classAirspacerendered = {
     type: "unique-value",
@@ -102,21 +26,18 @@ require([
         // autocasts as new SimpleLineSymbol()
         width: 0,
       },
-    },
+    }, // autocasts as new SimpleFillSymbol()
     uniqueValueInfos: [
       {
         value: "0, CLASS_E2",
         symbol: {
-          //type: "web-style",
-          //name: "airport",
-          //styleName: "Esri2DPointSymbolsStyle"
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "cyan",
-          style: "diagonal-cross",
+          color: [167, 98, 168, 0.3],
           outline: {
-            //autocasts as new SimpleLineSymbol()
-            color: "orange",
-            width: "2px",
+            // autocasts as new SimpleLineSymbol()
+            color: [167, 98, 168, 0.9],
+            width: "6px",
+            style: "dash",
           },
         },
       },
@@ -124,12 +45,12 @@ require([
         value: "0, CLASS_D",
         symbol: {
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "green",
-          style: "diagonal-cross",
+          color: [1, 135, 191, 0.3],
           outline: {
             // autocasts as new SimpleLineSymbol()
-            color: "orange",
-            width: "2px",
+            color: [1, 135, 191, 0.9],
+            width: "6px",
+            style: "dash",
           },
         },
       },
@@ -137,12 +58,11 @@ require([
         value: "0, CLASS_C",
         symbol: {
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "purple",
-          style: "diagonal-cross",
+          color: [167, 98, 168, 0.3],
           outline: {
             // autocasts as new SimpleLineSymbol()
-            color: "orange",
-            width: "2px",
+            color: [167, 98, 168, 0.9],
+            width: "6px",
           },
         },
       },
@@ -150,12 +70,11 @@ require([
         value: "0, CLASS_B",
         symbol: {
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "yellow",
-          style: "diagonal-cross",
+          color: [1, 135, 191, 0.3],
           outline: {
             // autocasts as new SimpleLineSymbol()
-            color: "orange",
-            width: "2px",
+            color: [1, 135, 191, 0.9],
+            width: "6px",
           },
         },
       },
@@ -164,9 +83,7 @@ require([
 
   var uasFacilitiesRenderer = {
     type: "unique-value",
-    field: "CEILING",
-    fieldDelimiter: ", ",
-
+    field: "APT1_LAANC",
     defaultSymbol: {
       type: "simple-fill",
       color: "blue",
@@ -177,69 +94,100 @@ require([
     }, // autocasts as new SimpleFillSymbol()
     uniqueValueInfos: [
       {
-        value: "400",
-        symbol: {
-          type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "cyan",
-          style: "none",
-          outline: {
-            // autocasts as new SimpleLineSymbol()
-            color: "cyan",
-            width: "2px",
-          },
-        },
-      },
-      {
-        value: "200",
+        // All features with value of "West" will be yellow
+        value: 1,
         symbol: {
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
           color: "green",
           style: "none",
           outline: {
-            // autocasts as new SimpleLineSymbol()
-            color: "orange",
-            width: "2px",
+            width: 3,
+            color: [0, 255, 0, 1],
           },
         },
       },
       {
-        value: "100",
+        // All features with value of "South" will be red
+        value: 0,
         symbol: {
           type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "purple",
+          color: "red",
           style: "none",
           outline: {
-            // autocasts as new SimpleLineSymbol()
-            color: "purple",
-            width: "2px",
-          },
-        },
-      },
-      {
-        value: "0",
-        symbol: {
-          type: "simple-fill", // autocasts as new SimpleFillSymbol()
-          color: "yellow",
-          style: "none",
-          outline: {
-            // autocasts as new SimpleLineSymbol()
-            color: "yellow",
-            width: "2px",
+            width: 3,
+            color: [200, 0, 0, 1],
           },
         },
       },
     ],
   };
 
-  var FacilityMaps = new FeatureLayer({
-    url:
-      "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V2/FeatureServer/",
-    outFields: ["*"],
-    popupTemplate: FacilityMapTemplate,
-    renderer: FM_rend,
-    opacity: 0.6,
-    visible: false,
-  });
+  var DistrictRenderer = {
+    type: "simple", // autocasts as new SimpleRenderer()
+    symbol: {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: [255, 128, 0, 0.0],
+      outline: {
+        // autocasts as new SimpleLineSymbol()
+        width: 2,
+        color: "white",
+      },
+    },
+  };
+
+  var DistrictLabels = {
+    symbol: {
+      type: "text",
+      color: "#FFFFFF",
+      haloColor: "#000000",
+      haloSize: "4px",
+      font: {
+        size: "18px",
+        family: "Noto Sans",
+        style: "italic",
+        weight: "normal",
+      },
+    },
+    labelPlacement: "above-center",
+    labelExpressionInfo: {
+      expression: " 'District ' + $feature.DISTRICT",
+    },
+  };
+
+  var UASFacilitiesLabels = {
+    symbol: {
+      type: "text",
+      color: "#FF0000",
+      haloColor: "#FFFFFF",
+      haloSize: "1px",
+      font: {
+        size: "15px",
+        family: "Noto Sans",
+        weight: "normal",
+      },
+    },
+    labelPlacement: "above-center",
+    labelExpressionInfo: {
+      expression: "$feature.CEILING",
+    },
+    minScale: 400000,
+    maxScale: 0,
+  };
+
+  var NFZ_Renderer = {
+    type: "simple", // autocasts as new SimpleRenderer()
+    symbol: {
+      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      color: [128, 0, 0, 0.6],
+      outline: {
+        // autocasts as new SimpleLineSymbol()
+        width: 2,
+        color: "red",
+      },
+    },
+  };
+
+  var TestSite_Renderer = {};
 
   var classAirspace = new FeatureLayer({
     url:
@@ -249,8 +197,11 @@ require([
     visible: true,
     renderer: classAirspacerendered,
     opacity: 0.8,
+    minScale: max_Zoom_Out,
+    maxScale: 0,
+    title: "FAA Airspace Class",
     definitionExpression:
-      "LOCAL_TYPE='CLASS_E2' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_B' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_C' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_D' AND LOWER_VAL=0",
+      "STATE = 'CA' AND (LOCAL_TYPE='CLASS_E2' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_B' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_C' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_D' AND LOWER_VAL=0)",
   });
 
   var uasFacilities = new FeatureLayer({
@@ -258,43 +209,120 @@ require([
       "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V3/FeatureServer/0/query?outFields=*&where=1%3D1",
     outFields: ["*"],
     //popupTemplate: classAirspaceTemplate,
-    visible: true,
+    minScale: max_Zoom_Out,
+    maxScale: 0,
     renderer: uasFacilitiesRenderer,
+    labelingInfo: [UASFacilitiesLabels],
     opacity: 0.8,
-    definitionExpression:
-      "CEILING='0' OR CEILING='50' OR CEILING='100' OR CEILING='200' OR CEILING='400'",
+    title: "UAS Facility Maps",
+    definitionExpression: "REGION = 'Western' ",
   });
 
   var CalTransDistrictBound = new FeatureLayer({
     url:
       "https://gisdata.dot.ca.gov/arcgis/rest/services/Boundary/District_Tiger_Lines/MapServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json",
-    opacity: 0.5,
-    color: "yellow",
+    renderer: DistrictRenderer,
+    title: "Caltrans Districts",
+    labelingInfo: [DistrictLabels],
   });
 
   var CalTransCountyBound = new FeatureLayer({
     url:
       "https://services.arcgis.com/BLN4oKB0N1YSgvY8/arcgis/rest/services/Counties_in_California/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json",
-    opacity: 0.5,
+    opacity: 0.1,
     color: "red",
   });
 
+  var UASTestSite = new FeatureLayer({
+    url:
+      "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer?token=Lht-1hBd8WuF59T6ujlr3nmiUzd2G6uhXTnrnmDeJYI7sgsDe3BXUhyfyD9syqZvkHipaUaE-Qd2tEmD4s3uxIhf6XgLUkvROK-ToitT5T2Vnnezt9LUh6UDROVlHiyRO3TF0iU6XKdp2ZR2yKzbQE3iBowp4cy3Regw70C8R0lMBXSCbk1ONqUqT5XTuQL7ntcAoBTyJ2FsXoOrNBq7-VvNCOQaQTCafSyXGEVdAgIGYsWW1qo--jMpVITzYU1b",
+    outFields: ["*"],
+    listMode: "hide",
+  });
+
+  var FAA_NS_NFZ = new FeatureLayer({
+    url:
+      "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/DoD_Mar_13/FeatureServer/0",
+    outFields: ["*"],
+    //popupTemplate: classAirspaceTemplate,
+    visible: true,
+    renderer: NFZ_Renderer,
+    opacity: 0.8,
+    minScale: max_Zoom_Out,
+    maxScale: 0,
+    listMode: "hide",
+    definitionExpression: "STATE = 'CA'",
+    //renderer: NFZ_Renderer,
+  });
+
   var map = new Map({
-    basemap: "gray",
+    basemap: "satellite",
     layers: [
-      //flightRestrictions,
-      //FacilityMaps,
       classAirspace,
-      //uasFacilities,
-      //CalTransDistrictBound,
+      uasFacilities,
+      CalTransDistrictBound,
       //CalTransCountyBound,
+      FAA_NS_NFZ,
+      UASTestSite,
     ],
   });
 
   var view = new MapView({
     container: "Map", // Reference to the view div created in step 5
     map: map, // Reference to the map object created before the view
-    zoom: 7, // Sets zoom level based on level of detail (LOD)
+    zoom: 11, // Sets zoom level based on level of detail (LOD)
     center: [-120.420165, 37.363572], // longitude, latitude
+  });
+
+  //const sitesNodes = document.querySelectorAll(`.site-item`);
+  const sitesElement = document.getElementById("sites-filter");
+
+  // click event handler for sites choices
+  sitesElement.addEventListener("click", filterBysite);
+
+  function filterBysite(event) {
+    var par = event.target.parentNode;
+    var c = par.children;
+    var i;
+    for (i = 0; i < c.length; i++) {
+      c[i].classList.remove("active");
+    }
+
+    event.target.classList.add("active");
+    const selectedsite = event.target.getAttribute("data-site");
+    siteLayerView.filter = {
+      where: selectedsite + " = 1",
+    };
+  }
+
+  var layerList = new LayerList({
+    view: view,
+  });
+  // Adds widget below other elements in the top left corner of the view
+  view.ui.add(layerList, {
+    position: "top-right",
+  });
+
+  view.whenLayerView(UASTestSite).then(function (layerView) {
+    // flash flood warnings layer loaded
+    // get a reference to the flood warnings layerview
+    siteLayerView = layerView;
+
+    // set up UI items
+    sitesElement.style.visibility = "visible";
+    const sitesExpand = new Expand({
+      view: view,
+      content: sitesElement,
+      expandIconClass: "esri-icon-filter",
+      group: "top-left",
+    });
+    //clear the filters when user closes the expand widget
+    sitesExpand.watch("expanded", function () {
+      if (!sitesExpand.expanded) {
+        siteLayerView.filter = null;
+      }
+    });
+    view.ui.add(sitesExpand, "top-left");
+    view.ui.add("titleDiv", "top-right");
   });
 });
