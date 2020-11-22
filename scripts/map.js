@@ -297,11 +297,12 @@ require([
 
   var layerList = new LayerList({
     view: view,
+    container: "layers",
   });
   // Adds widget below other elements in the top left corner of the view
-  view.ui.add(layerList, {
-    position: "top-right",
-  });
+  //view.ui.add(layerList, {
+  //  position: "top-right",
+  //});
 
   view.whenLayerView(UASTestSite).then(function (layerView) {
     // flash flood warnings layer loaded
