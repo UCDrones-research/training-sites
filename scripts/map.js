@@ -396,7 +396,6 @@ var NFZ_Renderer = {
       }
     });
     view.ui.add(sitesExpand, "top-left");
-    view.ui.add("titleDiv", "top-right");
   });
 
 });
