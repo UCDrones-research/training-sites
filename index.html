@@ -27,12 +27,18 @@
 
     <!-- Map Javascript Content -->
     <script type="text/javascript" src="scripts/map.js"></script>
+
+    <!-- Logic Javascript Content -->
+    <script type="text/javascript" src="scripts/logic.js"></script>
   </head>
 
   <body>
+    
+
     <div id="content" class="wrapper">
       <div id="header" class="top_header">
-        <p>California Drone Training Sites</p>
+        <img src="svg/drone-10.svg" alt="Drone Training" class="icon" />
+        <p class="h1">California Drone Training Sites</p>
       </div>
 	  
 	  <div id="sites-filter" class="esri-widget">
@@ -47,19 +53,85 @@
 	  
       <div id="Map" class="map_window"></div>
       <div id="DashBoard" class="dash_window">
-        <div id = "navpane"></div>
-		Layers<br>
-		<br>
-        <div id = "layers">
-          
-		  <div class="example-airspace">
-          FAA Airspace Layers<br>
 
-		  </div>
-          <p>FAA UAS Facility maps + SSI</p>
-          <p>Caltrans District</p>
-          <p>California County</p>
-          <p>Caltrans Aviation</p>
+        <div id="navpane">
+          <!-- Layers -->
+          <div id="navbtn" class="btnholder">
+            <button class="btn1">
+              <span class="material-icons"> layers </span>
+            </button>
+            <button class="btn1">
+              <span class="material-icons"> legend_toggle </span>
+            </button>
+            <button class="btn1">
+              <span class="material-icons"> info </span>
+            </button>
+          </div>
+          <div id="layers">
+
+
+            <div id="sites-filter" class="esri-widget">
+              <div class="site-item visible-site" data-site="SimpleTest">
+                Simple Testing
+              </div>
+              <div class="site-item visible-site" data-site="PerformanceTest">
+                Performance Testing
+              </div>
+              <div class="site-item visible-site" data-site="BegTraining">
+                Beginning Training
+              </div>
+              <div class="site-item visible-site" data-site="PilotTest">
+                Pilot Testing
+              </div>
+              <div class="site-item visible-site" data-site="AdvTest">
+                Advanced Pilot Training
+              </div>
+        
+              <div class="site-item visible-site" data-site="PracticeMission">
+                Practice Mission
+              </div>
+            </div>
+
+
+            <!-- <input
+              type="checkbox"
+              id="classAir"
+              onclick="layerToggle()"
+              style="float: left"
+            />
+            <p>Airspace Class</p>
+            <input
+              type="checkbox"
+              id="classAir"
+              onclick="layerToggle()"
+              style="float: left"
+            />
+            <p>FAA UAS Facility maps + SSI</p>
+            <input
+              type="checkbox"
+              id="classAir"
+              onclick="layerToggle()"
+              style="float: left"
+            />
+            <p>Caltrans District</p>
+            <input
+              type="checkbox"
+              id="classAir"
+              onclick="layerToggle()"
+              style="float: left"
+            />
+            <p>California County</p>
+            <input
+              type="checkbox"
+              id="classAir"
+              onclick="layerToggle()"
+              style="float: left"
+            />
+            <p>Caltrans Aviation</p> -->
+          </div>
+          <div id="legend"></div>
+          <div id="info"></div>
+
         </div>
         <!-- Side Pane Content -->
       </div>
