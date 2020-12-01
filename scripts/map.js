@@ -10,7 +10,8 @@ require([
   "esri/geometry/Extent",
   "esri/widgets/Expand",
   "esri/widgets/LayerList",
-], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList) {
+  "esri/widgets/BasemapToggle",
+], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList, BasemapToggle) {
   let siteLayerView;
 
   var classAirspacerendered = {
@@ -37,7 +38,7 @@ require([
           outline: {
             // autocasts as new SimpleLineSymbol()
             color: [167, 98, 168, .9],
-            width: "6px",
+            width: "3px",
 			style: "dash",
 
           },
@@ -52,7 +53,7 @@ require([
           outline: {
             // autocasts as new SimpleLineSymbol()
             color: [1, 135, 191, 0.9],
-            width: "6px",
+            width: "3px",
             style: "dash",
 
           },
@@ -66,7 +67,7 @@ require([
           outline: {
             // autocasts as new SimpleLineSymbol()
             color: [167, 98, 168, .9],
-            width: "6px",
+            width: "3px",
           },
         },
       },
@@ -78,7 +79,7 @@ require([
           outline: {
             // autocasts as new SimpleLineSymbol()
             color: [1, 135, 191, .9],
-            width: "6px",
+            width: "3px",
           },
         },
       },
@@ -92,37 +93,32 @@ require([
       type: "simple-fill",
       color: "blue",
       outline: {
-        // autocasts as new SimpleLineSymbol()
         width: 0,
       },
-    }, // autocasts as new SimpleFillSymbol()
+    }, 
     uniqueValueInfos: [
-	{
-    // All features with value of "West" will be yellow
-      value: 1,
-      symbol: {
-        type: "simple-fill",  // autocasts as new SimpleFillSymbol()
-        color: "green",
-	    style:"none",
-	    outline: {
-		  width: 3,
-		  color: [0,255,0,1],
-	    }
-      }
-    },
-	{
-    // All features with value of "South" will be red
-    value: 0,
-    symbol: {
-      type: "simple-fill",  // autocasts as new SimpleFillSymbol()
-      color: "red",
-	  style: "none",
-	  outline: {
-            width: 3,
-		    color: [200,0,0,1],
-          },
-      }
-    }
+		{
+		  value: 1,
+		  symbol: {
+			type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+			color: [0, 128, 0, .3],
+			outline: {
+			  width: 3,
+			  color: [0,255,0,1],
+			}
+		  }
+		},
+		{
+		value: 0,
+		symbol: {
+		  type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+		  color: [255, 69, 0, .3],
+		  outline: {
+				width: 3,
+				color: [255,99,71,1],
+			  },
+		  }
+		}
 	],
   };
 
@@ -151,7 +147,7 @@ var DistrictLabels = {
       weight: "normal"
     }
   },
-  labelPlacement: "above-center",
+  labelPlacement: "always-horizontal",
   labelExpressionInfo: {
     expression: " 'District ' + $feature.DISTRICT" 
   }
@@ -169,7 +165,7 @@ var UASFacilitiesLabels = {
       weight: "normal"
     }
   },
-  labelPlacement: "above-center",
+  labelPlacement: "always-horizontal",
   labelExpressionInfo: {
     expression: "$feature.CEILING" 
   },
@@ -185,6 +181,18 @@ var NFZ_Renderer = {
 		outline: {  // autocasts as new SimpleLineSymbol()
 		  width: 2,
 		  color: "red"
+		}
+	  }
+  };
+  
+  var NPS_Renderer = {
+	 type: "simple",  // autocasts as new SimpleRenderer()
+     symbol: {
+		type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+		color: [ 255, 140, 0, 0.6 ],
+		outline: {  // autocasts as new SimpleLineSymbol()
+		  width: 2,
+		  color: "orange"
 		}
 	  }
   };
@@ -207,7 +215,7 @@ var NFZ_Renderer = {
       type: "text",
       color: "#FFFFFF",
       haloColor: "#000000",
-      haloSize: "4px",
+      haloSize: "2px",
       font: {
         size: "18px",
         family: "Noto Sans",
@@ -215,9 +223,28 @@ var NFZ_Renderer = {
         weight: "normal",
       },
     },
-    labelPlacement: "above-center",
+    labelPlacement: "always-horizontal",
     labelExpressionInfo: {
       expression: " 'District ' + $feature.DISTRICT",
+    },
+  };
+  
+  var NFS_Labels = {
+    symbol: {
+      type: "text",
+      color: "#FFFFFF",
+      haloColor: "#000000",
+      haloSize: "1px",
+      font: {
+        size: "14px",
+        family: "Noto Sans",
+        style: "normal",
+        weight: "normal",
+      },
+    },
+    labelPlacement: "always-horizontal",
+    labelExpressionInfo: {
+      expression: "$feature.FORESTNAME",
     },
   };
 
@@ -233,11 +260,11 @@ var NFZ_Renderer = {
         weight: "normal",
       },
     },
-    labelPlacement: "above-center",
+    labelPlacement: "always-horizontal",
     labelExpressionInfo: {
       expression: "$feature.CEILING",
     },
-    minScale: 400000,
+    minScale: 100000,
     maxScale: 0,
   };
 
@@ -254,7 +281,32 @@ var NFZ_Renderer = {
     },
   };
 
-  var TestSite_Renderer = {};
+  
+  var NFS_Renderer = {
+	  type: "simple",
+	  symbol: {
+		  type: "simple-fill",
+		  color: [0,128,0,0.4],
+		  outline: {
+			  width: 1.5,
+			  color: "green",
+		  },
+	  },
+  };
+  
+  var FAA_RF_Renderer = {
+	  type: "simple",
+	  symbol: {
+		  type: "simple-fill",
+		  color: [0,0,128,0.4],
+		  outline: {
+			  width: 1.5,
+			  color: "blue",
+		  },
+	  },
+  };
+  
+  
 
   var classAirspace = new FeatureLayer({
     url:
@@ -273,22 +325,22 @@ var NFZ_Renderer = {
 
   var uasFacilities = new FeatureLayer({
     url:
-      "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V3/FeatureServer/0/query?outFields=*&where=1%3D1",
+      "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V3/FeatureServer/0",
     outFields: ["*"],
     //popupTemplate: classAirspaceTemplate,
     minScale: max_Zoom_Out,
     maxScale: 0,
     renderer: uasFacilitiesRenderer,
     labelingInfo: [UASFacilitiesLabels],
-    opacity: 0.8,
+	visible: false,
     title: "UAS Facility Maps",
     definitionExpression: "REGION = 'Western' ",
-
+	
   });
 
   var CalTransDistrictBound = new FeatureLayer({
     url:
-      "https://gisdata.dot.ca.gov/arcgis/rest/services/Boundary/District_Tiger_Lines/MapServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json",
+      "https://gisdata.dot.ca.gov/arcgis/rest/services/Boundary/District_Tiger_Lines/MapServer/0",
     renderer: DistrictRenderer,
     title: "Caltrans Districts",
     labelingInfo: [DistrictLabels],
@@ -297,7 +349,7 @@ var NFZ_Renderer = {
 
   var CalTransCountyBound = new FeatureLayer({
     url:
-      "https://services.arcgis.com/BLN4oKB0N1YSgvY8/arcgis/rest/services/Counties_in_California/FeatureServer/0/query?where=1%3D1&outFields=*&outSR=4326&f=json",
+      "https://services.arcgis.com/BLN4oKB0N1YSgvY8/arcgis/rest/services/Counties_in_California/FeatureServer/0",
     opacity: 0.1,
     color: "red",
 	
@@ -305,9 +357,15 @@ var NFZ_Renderer = {
 
   var UASTestSite = new FeatureLayer({
     url:
-      "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer?token=Lht-1hBd8WuF59T6ujlr3nmiUzd2G6uhXTnrnmDeJYI7sgsDe3BXUhyfyD9syqZvkHipaUaE-Qd2tEmD4s3uxIhf6XgLUkvROK-ToitT5T2Vnnezt9LUh6UDROVlHiyRO3TF0iU6XKdp2ZR2yKzbQE3iBowp4cy3Regw70C8R0lMBXSCbk1ONqUqT5XTuQL7ntcAoBTyJ2FsXoOrNBq7-VvNCOQaQTCafSyXGEVdAgIGYsWW1qo--jMpVITzYU1b",
+      "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer",
+	  //"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer?token=Lht-1hBd8WuF59T6ujlr3nmiUzd2G6uhXTnrnmDeJYI7sgsDe3BXUhyfyD9syqZvkHipaUaE-Qd2tEmD4s3uxIhf6XgLUkvROK-ToitT5T2Vnnezt9LUh6UDROVlHiyRO3TF0iU6XKdp2ZR2yKzbQE3iBowp4cy3Regw70C8R0lMBXSCbk1ONqUqT5XTuQL7ntcAoBTyJ2FsXoOrNBq7-VvNCOQaQTCafSyXGEVdAgIGYsWW1qo--jMpVITzYU1b",
     outFields: ["*"],
     listMode: "hide",
+	
+	popupTemplate: {
+		title: "{Name}",
+		content: "<b>Owner:</b> {Owner}<br><b>Access:</b> {Access}<br><b>Notes:</b> {Notes}",
+	},
   });
 
   var FAA_NS_NFZ = new FeatureLayer({
@@ -322,18 +380,102 @@ var NFZ_Renderer = {
     maxScale: 0,
     listMode: "hide",
     definitionExpression: "STATE = 'CA'",
-    //renderer: NFZ_Renderer,
+	
+	popupTemplate: {
+		title: "{Base} - {Facility}",
+		content: "<b>FAA No Fly Zone</b><br><b>Reason:</b> {REASON}",
+	},
+  });
+  
+  var NFS_bounds = new FeatureLayer({
+	 url:"https://apps.fs.usda.gov/arcx/rest/services/EDW/EDW_ForestSystemBoundaries_01/MapServer" ,
+	 outFields:["*"],
+	 title: "National Forests",
+	 minScale: max_Zoom_Out,
+     maxScale: 0,
+	 renderer: NFS_Renderer,
+	 labelingInfo: [NFS_Labels],
+	 definitionExpression: "REGION = '05'",
+	 visible: false,
+	 popupTemplate: {
+		 title: "{FORESTNAME}",
+		 content: "Flight Operations within National Forests are not prohibited, but please contact the U.S. Forest Service if you want to operate in these areas. <b>Flight operations within Congressionally Designated Wilderness Areas are prohibited</b>",
+	 }
+  });
+  
+  var DL_NOTAM = new FeatureLayer({
+	 url: "https://www.ocgis.com/uav/rest/services/Survey/OC_Flight_Restrictions/MapServer/0",
+	 minScale: max_Zoom_Out,
+	 maxScale: 0,
+	 listMode: "hide",
+	 renderer: NFZ_Renderer,
+	 popupTemplate: {
+		 title: "DISNEYLAND",
+		 content: "<b>FAA No Fly Zone</b><br><b>Reason: </b>Disneyland TFR<br><b>Request Authorization</b>: <a href='HTTP://WWW.TSA.GOV/STAKEHOLDERS/AIRSPACE-WAIVERS-0' target='_blank'>HTTP://WWW.TSA.GOV/STAKEHOLDERS/AIRSPACE-WAIVERS-0</a>"
+	 },
+  });
+  
+  var FAA_rec_fields = new FeatureLayer({
+	url: "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/Recreational_Flyer_Fixed_Sites/FeatureServer/0",
+	outFields: ["*"],
+	definitionExpression: "STATE = 'CA'",
+	visible: true,
+	minScale: max_Zoom_Out,
+	maxScale: 0,	
+	renderer: FAA_RF_Renderer,
+	title: "FAA Recognized Recreational Flyer Fixed Sites",
+	
+	popupTemplate: {
+		title: "Recreational Flyer Site",
+		content: "<b>Club Name:</b> {SITE_NAME} <br>Contact the Club for Access Information",
+	}
+  });
+  
+  var CA_State_Park = new FeatureLayer({
+	 url: "https://services2.arcgis.com/AhxrK3F6WM8ECvDi/arcgis/rest/services/ParkBoundaries/FeatureServer/0", 
+	 outFields: ["*"],
+	 definitionExpression: "SUBTYPE = 'Park Unit or Property'",
+	 title: "CA State Parks",
+	 minScale: max_Zoom_Out,
+	 maxScale: 0,
+	 visible: false,
+	 
+	 popupTemplate: {
+		title: "{UNITNAME}",
+		content: "Contact the Park for authorization<br><b>More Information: </b><a href='https://www.parks.ca.gov/?page_id=29229' target='_blank'>Drones in State Parks</a>",
+	 }
+  });
+  
+  var US_NPS = new FeatureLayer({
+	 url: "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/NPS_Land_Resources_Division_Boundary_and_Tract_Data_Service/FeatureServer/2",
+	 outFields: ["*"],
+	 title: "US National Parks",
+	 minScale: max_Zoom_Out,
+	 maxScale: 0,
+	 visible: false,
+	 definitionExpression: "STATE = 'CA'",
+	 renderer: NPS_Renderer,
+	 
+	 popupTemplate: {
+		title: "{UNIT_NAME}",
+		content: "National Parks are generally a no-drone-zone.  Contact the Park for authorization",
+	 }
   });
 
 
   var map = new Map({
-    basemap: "satellite",
+    basemap: "gray",
     layers: [
+	  CalTransDistrictBound,
+	  US_NPS,
+	  NFS_bounds,
+	  CA_State_Park,
       classAirspace,
       uasFacilities,
-      CalTransDistrictBound,
-      //CalTransCountyBound,
-	  FAA_NS_NFZ,
+	  FAA_rec_fields,
+      FAA_NS_NFZ,
+	  DL_NOTAM,
+	  	  
 	  UASTestSite,
     ],
   });
@@ -344,6 +486,13 @@ var NFZ_Renderer = {
     zoom: 11, // Sets zoom level based on level of detail (LOD)
     center: [-120.420165, 37.363572], // longitude, latitude
   });
+  
+  var basemapToggle = new BasemapToggle({
+	view: view,
+	nextBasemap: "satellite"
+  });
+  
+  view.ui.add(basemapToggle, "bottom-right");
   
 
   //const sitesNodes = document.querySelectorAll(`.site-item`);
@@ -371,10 +520,11 @@ var NFZ_Renderer = {
     view: view,
     container: "layers",
   });
-  // Adds widget below other elements in the top left corner of the view
-  //view.ui.add(layerList, {
-  //  position: "top-right",
-  //});
+
+  setTimeout(function(){
+	layerList.operationalItems.reverse();
+  }, 2000);
+
 
   view.whenLayerView(UASTestSite).then(function (layerView) {
     // flash flood warnings layer loaded

@@ -41,6 +41,10 @@ body {
   width: 100%;
 }
 
+.small-caption {
+	font-size: small;
+	font-style: italic;
+}
 
 
 #sites-filter {
