@@ -11,7 +11,9 @@ require([
   "esri/widgets/Expand",
   "esri/widgets/LayerList",
   "esri/widgets/BasemapToggle",
-], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList, BasemapToggle) {
+  "esri/layers/GroupLayer",
+  "esri/widgets/Legend",
+], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList, BasemapToggle, GroupLayer, Legend) {
   let siteLayerView;
 
   var classAirspacerendered = {
@@ -306,6 +308,7 @@ var NFZ_Renderer = {
 			width: 2,  // points
 		  }
 	  },
+	  label: "Recognized Fixed-Flying Site",
   };
   
   
@@ -360,9 +363,9 @@ var NFZ_Renderer = {
   var UASTestSite = new FeatureLayer({
     url:
       "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer",
-	  //"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer?token=Lht-1hBd8WuF59T6ujlr3nmiUzd2G6uhXTnrnmDeJYI7sgsDe3BXUhyfyD9syqZvkHipaUaE-Qd2tEmD4s3uxIhf6XgLUkvROK-ToitT5T2Vnnezt9LUh6UDROVlHiyRO3TF0iU6XKdp2ZR2yKzbQE3iBowp4cy3Regw70C8R0lMBXSCbk1ONqUqT5XTuQL7ntcAoBTyJ2FsXoOrNBq7-VvNCOQaQTCafSyXGEVdAgIGYsWW1qo--jMpVITzYU1b",
+	  
     outFields: ["*"],
-    listMode: "hide",
+	title: "Caltrans Drone Flying Sites",
 	
 	popupTemplate: {
 		title: "{Name}",
@@ -398,7 +401,6 @@ var NFZ_Renderer = {
 	 renderer: NFS_Renderer,
 	 labelingInfo: [NFS_Labels],
 	 definitionExpression: "REGION = '05'",
-	 visible: false,
 	 popupTemplate: {
 		 title: "{FORESTNAME}",
 		 content: "Flight Operations within National Forests are not prohibited, but please contact the U.S. Forest Service if you want to operate in these areas. <b>Flight operations within Congressionally Designated Wilderness Areas are prohibited</b>",
@@ -440,7 +442,6 @@ var NFZ_Renderer = {
 	 title: "CA State Parks",
 	 minScale: max_Zoom_Out,
 	 maxScale: 0,
-	 visible: false,
 	 
 	 popupTemplate: {
 		title: "{UNITNAME}",
@@ -454,7 +455,6 @@ var NFZ_Renderer = {
 	 title: "US National Parks",
 	 minScale: max_Zoom_Out,
 	 maxScale: 0,
-	 visible: false,
 	 definitionExpression: "STATE = 'CA'",
 	 renderer: NPS_Renderer,
 	 
@@ -465,20 +465,38 @@ var NFZ_Renderer = {
   });
 
 
+  var publicGroupLayers = new GroupLayer({
+	  title: "Public Lands",
+	  visible: false,
+	  visibilityMode: "independent",
+	  layers: [US_NPS, NFS_bounds, CA_State_Park],
+  });
+  
+  var flyingsitesGroupLayers = new GroupLayer({
+	 title: "Identified Flying Sites",
+		visible: true,
+		visibilityMode: "independent",
+		layers: [FAA_rec_fields, UASTestSite],
+  });
+  
+  var airspaceGroupLayers = new GroupLayer({
+	 title: "FAA Airspace Information",
+	 visible: true,
+	 visibilityMode: "independent",
+	 layers: [classAirspace, uasFacilities],
+  });
+
   var map = new Map({
     basemap: "gray",
     layers: [
 	  CalTransDistrictBound,
-	  US_NPS,
-	  NFS_bounds,
-	  CA_State_Park,
-      classAirspace,
-      uasFacilities,
-	  FAA_rec_fields,
+	  publicGroupLayers,
+      airspaceGroupLayers,
+	  
       FAA_NS_NFZ,
 	  DL_NOTAM,
-	  	  
-	  UASTestSite,
+	  flyingsitesGroupLayers,	  
+	  
     ],
   });
 
@@ -525,7 +543,26 @@ var NFZ_Renderer = {
 
   setTimeout(function(){
 	layerList.operationalItems.reverse();
+	
+	var legend = new Legend({
+	  view: view,
+	  layerInfos: [
+	  {
+		  layer: FAA_rec_fields,
+		  title: "FAA Sites",
+	  },
+	  {
+		layer: UASTestSite,
+		title: "Identified Flying Sites"
+	  }
+	  ]
+	});
+	view.ui.add(legend, "top-right");
+	
   }, 2000);
+
+	
+
 
 
   view.whenLayerView(UASTestSite).then(function (layerView) {
