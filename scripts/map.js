@@ -26,19 +26,17 @@ require([
       type: "simple-fill",
       style: "none",
       outline: {
-        // autocasts as new SimpleLineSymbol()
         width: 0,
       },
-    }, // autocasts as new SimpleFillSymbol()
+    }, 
     uniqueValueInfos: [
       {
         value: "0, CLASS_E2",
         symbol: {
-          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          type: "simple-fill",
 
           color: [167, 98, 168, .3],
           outline: {
-            // autocasts as new SimpleLineSymbol()
             color: [167, 98, 168, .9],
             width: "3px",
 			style: "dash",
@@ -49,11 +47,10 @@ require([
       {
         value: "0, CLASS_D",
         symbol: {
-          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          type: "simple-fill", 
 
           color: [1, 135, 191, 0.3],
           outline: {
-            // autocasts as new SimpleLineSymbol()
             color: [1, 135, 191, 0.9],
             width: "3px",
             style: "dash",
@@ -64,10 +61,9 @@ require([
       {
         value: "0, CLASS_C",
         symbol: {
-          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          type: "simple-fill", 
           color: [167, 98, 168, .3],
           outline: {
-            // autocasts as new SimpleLineSymbol()
             color: [167, 98, 168, .9],
             width: "3px",
           },
@@ -76,10 +72,9 @@ require([
       {
         value: "0, CLASS_B",
         symbol: {
-          type: "simple-fill", // autocasts as new SimpleFillSymbol()
+          type: "simple-fill",
           color: [1, 135, 191, .3],
           outline: {
-            // autocasts as new SimpleLineSymbol()
             color: [1, 135, 191, .9],
             width: "3px",
           },
@@ -102,7 +97,7 @@ require([
 		{
 		  value: 1,
 		  symbol: {
-			type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+			type: "simple-fill",  
 			color: [0, 128, 0, .3],
 			outline: {
 			  width: 3,
@@ -113,7 +108,7 @@ require([
 		{
 		value: 0,
 		symbol: {
-		  type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+		  type: "simple-fill",  
 		  color: [255, 69, 0, .3],
 		  outline: {
 				width: 3,
@@ -125,11 +120,11 @@ require([
   };
 
   var DistrictRenderer = {
-	 type: "simple",  // autocasts as new SimpleRenderer()
+	 type: "simple",  
      symbol: {
-		type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+		type: "simple-fill",  
 		color: [ 255, 128, 0, 0.0 ],
-		outline: {  // autocasts as new SimpleLineSymbol()
+		outline: {  
 		  width: 2,
 		  color: "white"
 		}
@@ -176,11 +171,11 @@ var UASFacilitiesLabels = {
 };
 
 var NFZ_Renderer = {
-	 type: "simple",  // autocasts as new SimpleRenderer()
+	 type: "simple", 
      symbol: {
-		type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+		type: "simple-fill",  
 		color: [ 128, 0, 0, 0.6 ],
-		outline: {  // autocasts as new SimpleLineSymbol()
+		outline: { 
 		  width: 2,
 		  color: "red"
 		}
@@ -188,11 +183,11 @@ var NFZ_Renderer = {
   };
   
   var NPS_Renderer = {
-	 type: "simple",  // autocasts as new SimpleRenderer()
+	 type: "simple",  
      symbol: {
-		type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+		type: "simple-fill",  
 		color: [ 255, 140, 0, 0.6 ],
-		outline: {  // autocasts as new SimpleLineSymbol()
+		outline: { 
 		  width: 2,
 		  color: "orange"
 		}
@@ -200,12 +195,11 @@ var NFZ_Renderer = {
   };
 
   var DistrictRenderer = {
-    type: "simple", // autocasts as new SimpleRenderer()
+    type: "simple",
     symbol: {
-      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      type: "simple-fill", 
       color: [255, 128, 0, 0.0],
       outline: {
-        // autocasts as new SimpleLineSymbol()
         width: 2,
         color: "white",
       },
@@ -271,12 +265,11 @@ var NFZ_Renderer = {
   };
 
   var NFZ_Renderer = {
-    type: "simple", // autocasts as new SimpleRenderer()
+    type: "simple", 
     symbol: {
-      type: "simple-fill", // autocasts as new SimpleFillSymbol()
+      type: "simple-fill", 
       color: [128, 0, 0, 0.6],
       outline: {
-        // autocasts as new SimpleLineSymbol()
         width: 2,
         color: "red",
       },
@@ -299,13 +292,13 @@ var NFZ_Renderer = {
   var FAA_RF_Renderer = {
 	  type: "simple",
 	  symbol: {
-		  type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+		  type: "simple-marker", 
 		  style: "circle",
 		  color: "green",
-		  size: "10px",  // pixels
-		  outline: {  // autocasts as new SimpleLineSymbol()
+		  size: "10px",  
+		  outline: {  
 			color: [0, 0, 0 ],
-			width: 2,  // points
+			width: 2,  
 		  }
 	  },
 	  label: "Recognized Fixed-Flying Site",
@@ -317,7 +310,7 @@ var NFZ_Renderer = {
     url:
       "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/ArcGIS/rest/services/Class_Airspace/FeatureServer/0",
     outFields: ["*"],
-    //popupTemplate: classAirspaceTemplate,
+
     visible: true,
     renderer: classAirspacerendered,
     opacity: 0.8,
@@ -332,7 +325,7 @@ var NFZ_Renderer = {
     url:
       "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V3/FeatureServer/0",
     outFields: ["*"],
-    //popupTemplate: classAirspaceTemplate,
+
     minScale: max_Zoom_Out,
     maxScale: 0,
     renderer: uasFacilitiesRenderer,
@@ -377,7 +370,7 @@ var NFZ_Renderer = {
     url:
       "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/DoD_Mar_13/FeatureServer/0",
     outFields: ["*"],
-    //popupTemplate: classAirspaceTemplate,
+
     visible: true,
     renderer: NFZ_Renderer,
     opacity: 0.8,
@@ -501,9 +494,9 @@ var NFZ_Renderer = {
   });
 
   var view = new MapView({
-    container: "Map", // Reference to the view div created in step 5
-    map: map, // Reference to the map object created before the view
-    zoom: 11, // Sets zoom level based on level of detail (LOD)
+    container: "Map", 
+    map: map, 
+    zoom: 11, 
     center: [-120.420165, 37.363572], // longitude, latitude
   });
   
@@ -514,8 +507,6 @@ var NFZ_Renderer = {
   
   view.ui.add(basemapToggle, "bottom-right");
   
-
-  //const sitesNodes = document.querySelectorAll(`.site-item`);
   const sitesElement = document.getElementById("sites-filter");
 
   // click event handler for sites choices
@@ -541,6 +532,7 @@ var NFZ_Renderer = {
     container: "layers",
   });
 
+  //Do some things after everything has loaded
   setTimeout(function(){
 	layerList.operationalItems.reverse();
 	
@@ -548,29 +540,23 @@ var NFZ_Renderer = {
 	  view: view,
 	  layerInfos: [
 	  {
-		  layer: FAA_rec_fields,
-		  title: "FAA Sites",
+		layer: FAA_rec_fields,
+		title: "FAA Sites",
 	  },
 	  {
 		layer: UASTestSite,
 		title: "Identified Flying Sites"
 	  }
-	  ]
+	  ],
 	});
 	view.ui.add(legend, "top-right");
 	
   }, 2000);
 
-	
-
-
-
   view.whenLayerView(UASTestSite).then(function (layerView) {
-    // flash flood warnings layer loaded
-    // get a reference to the flood warnings layerview
+
     siteLayerView = layerView;
 
-    // set up UI items
     sitesElement.style.visibility = "visible";
     const sitesExpand = new Expand({
       view: view,
@@ -578,7 +564,7 @@ var NFZ_Renderer = {
       expandIconClass: "esri-icon-filter",
       group: "top-left",
     });
-    //clear the filters when user closes the expand widget
+
     sitesExpand.watch("expanded", function () {
       if (!sitesExpand.expanded) {
         siteLayerView.filter = null;
