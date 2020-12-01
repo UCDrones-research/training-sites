@@ -297,12 +297,14 @@ var NFZ_Renderer = {
   var FAA_RF_Renderer = {
 	  type: "simple",
 	  symbol: {
-		  type: "simple-fill",
-		  color: [0,0,128,0.4],
-		  outline: {
-			  width: 1.5,
-			  color: "blue",
-		  },
+		  type: "simple-marker",  // autocasts as new SimpleMarkerSymbol()
+		  style: "circle",
+		  color: "green",
+		  size: "10px",  // pixels
+		  outline: {  // autocasts as new SimpleLineSymbol()
+			color: [0, 0, 0 ],
+			width: 2,  // points
+		  }
 	  },
   };
   
