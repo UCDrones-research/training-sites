@@ -1,6 +1,3 @@
-var max_Zoom_Out = 2400000;
-
-//https://developers.arcgis.com/javascript/latest/sample-code/widgets-layerlist-actions/index.html
 
 require([
   "esri/Map",
@@ -13,298 +10,12 @@ require([
   "esri/widgets/BasemapToggle",
   "esri/layers/GroupLayer",
   "esri/widgets/Legend",
-], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList, BasemapToggle, GroupLayer, Legend) {
+  "esri/layers/GraphicsLayer", 
+  "esri/Graphic",
+  "esri/Color",
+], function (Map, Basemap, MapView, FeatureLayer, Extent, Expand, LayerList, BasemapToggle, GroupLayer, Legend, Color, GraphicsLayer, Graphic) {
+	
   let siteLayerView;
-
-  var classAirspacerendered = {
-    type: "unique-value",
-    field: "LOWER_VAL",
-    field2: "LOCAL_TYPE",
-    fieldDelimiter: ", ",
-
-    defaultSymbol: {
-      type: "simple-fill",
-      style: "none",
-      outline: {
-        width: 0,
-      },
-    }, 
-    uniqueValueInfos: [
-      {
-        value: "0, CLASS_E2",
-        symbol: {
-          type: "simple-fill",
-
-          color: [167, 98, 168, .3],
-          outline: {
-            color: [167, 98, 168, .9],
-            width: "3px",
-			style: "dash",
-
-          },
-        },
-      },
-      {
-        value: "0, CLASS_D",
-        symbol: {
-          type: "simple-fill", 
-
-          color: [1, 135, 191, 0.3],
-          outline: {
-            color: [1, 135, 191, 0.9],
-            width: "3px",
-            style: "dash",
-
-          },
-        },
-      },
-      {
-        value: "0, CLASS_C",
-        symbol: {
-          type: "simple-fill", 
-          color: [167, 98, 168, .3],
-          outline: {
-            color: [167, 98, 168, .9],
-            width: "3px",
-          },
-        },
-      },
-      {
-        value: "0, CLASS_B",
-        symbol: {
-          type: "simple-fill",
-          color: [1, 135, 191, .3],
-          outline: {
-            color: [1, 135, 191, .9],
-            width: "3px",
-          },
-        },
-      },
-    ],
-  };
-
-  var uasFacilitiesRenderer = {
-    type: "unique-value",
-    field: "APT1_LAANC",
-    defaultSymbol: {
-      type: "simple-fill",
-      color: "blue",
-      outline: {
-        width: 0,
-      },
-    }, 
-    uniqueValueInfos: [
-		{
-		  value: 1,
-		  symbol: {
-			type: "simple-fill",  
-			color: [0, 128, 0, .3],
-			outline: {
-			  width: 3,
-			  color: [0,255,0,1],
-			}
-		  }
-		},
-		{
-		value: 0,
-		symbol: {
-		  type: "simple-fill",  
-		  color: [255, 69, 0, .3],
-		  outline: {
-				width: 3,
-				color: [255,99,71,1],
-			  },
-		  }
-		}
-	],
-  };
-
-  var DistrictRenderer = {
-	 type: "simple",  
-     symbol: {
-		type: "simple-fill",  
-		color: [ 255, 128, 0, 0.0 ],
-		outline: {  
-		  width: 2,
-		  color: "white"
-		}
-	  }
-  };
-
-var DistrictLabels = {
-  symbol: {
-    type: "text",
-    color: "#FFFFFF",
-    haloColor: "#000000",
-    haloSize: "4px",
-    font: {
-      size: "18px",
-      family: "Noto Sans",
-      style: "italic",
-      weight: "normal"
-    }
-  },
-  labelPlacement: "always-horizontal",
-  labelExpressionInfo: {
-    expression: " 'District ' + $feature.DISTRICT" 
-  }
-};
-
-var UASFacilitiesLabels = {
-  symbol: {
-    type: "text",
-    color: "#FF0000",
-    haloColor: "#FFFFFF",
-    haloSize: "1px",
-    font: {
-      size: "15px",
-      family: "Noto Sans",
-      weight: "normal"
-    }
-  },
-  labelPlacement: "always-horizontal",
-  labelExpressionInfo: {
-    expression: "$feature.CEILING" 
-  },
-  minScale: 400000,
-  maxScale: 0,
-};
-
-var NFZ_Renderer = {
-	 type: "simple", 
-     symbol: {
-		type: "simple-fill",  
-		color: [ 128, 0, 0, 0.6 ],
-		outline: { 
-		  width: 2,
-		  color: "red"
-		}
-	  }
-  };
-  
-  var NPS_Renderer = {
-	 type: "simple",  
-     symbol: {
-		type: "simple-fill",  
-		color: [ 255, 140, 0, 0.6 ],
-		outline: { 
-		  width: 2,
-		  color: "orange"
-		}
-	  }
-  };
-
-  var DistrictRenderer = {
-    type: "simple",
-    symbol: {
-      type: "simple-fill", 
-      color: [255, 128, 0, 0.0],
-      outline: {
-        width: 2,
-        color: "white",
-      },
-    },
-  };
-
-  var DistrictLabels = {
-    symbol: {
-      type: "text",
-      color: "#FFFFFF",
-      haloColor: "#000000",
-      haloSize: "2px",
-      font: {
-        size: "18px",
-        family: "Noto Sans",
-        style: "italic",
-        weight: "normal",
-      },
-    },
-    labelPlacement: "always-horizontal",
-    labelExpressionInfo: {
-      expression: " 'District ' + $feature.DISTRICT",
-    },
-  };
-  
-  var NFS_Labels = {
-    symbol: {
-      type: "text",
-      color: "#FFFFFF",
-      haloColor: "#000000",
-      haloSize: "1px",
-      font: {
-        size: "14px",
-        family: "Noto Sans",
-        style: "normal",
-        weight: "normal",
-      },
-    },
-    labelPlacement: "always-horizontal",
-    labelExpressionInfo: {
-      expression: "$feature.FORESTNAME",
-    },
-  };
-
-  var UASFacilitiesLabels = {
-    symbol: {
-      type: "text",
-      color: "#FF0000",
-      haloColor: "#FFFFFF",
-      haloSize: "1px",
-      font: {
-        size: "15px",
-        family: "Noto Sans",
-        weight: "normal",
-      },
-    },
-    labelPlacement: "always-horizontal",
-    labelExpressionInfo: {
-      expression: "$feature.CEILING",
-    },
-    minScale: 100000,
-    maxScale: 0,
-  };
-
-  var NFZ_Renderer = {
-    type: "simple", 
-    symbol: {
-      type: "simple-fill", 
-      color: [128, 0, 0, 0.6],
-      outline: {
-        width: 2,
-        color: "red",
-      },
-    },
-  };
-
-  
-  var NFS_Renderer = {
-	  type: "simple",
-	  symbol: {
-		  type: "simple-fill",
-		  color: [0,128,0,0.4],
-		  outline: {
-			  width: 1.5,
-			  color: "green",
-		  },
-	  },
-  };
-  
-  var FAA_RF_Renderer = {
-	  type: "simple",
-	  symbol: {
-		  type: "simple-marker", 
-		  style: "circle",
-		  color: "green",
-		  size: "10px",  
-		  outline: {  
-			color: [0, 0, 0 ],
-			width: 2,  
-		  }
-	  },
-	  label: "Recognized Fixed-Flying Site",
-  };
-  
-  
 
   var classAirspace = new FeatureLayer({
     url:
@@ -312,44 +23,29 @@ var NFZ_Renderer = {
     outFields: ["*"],
 
     visible: true,
-    renderer: classAirspacerendered,
+    renderer: renderer_classAirspace,
     opacity: 0.8,
 	minScale: max_Zoom_Out,
 	maxScale: 0,
 	title: "FAA Airspace Class",
     definitionExpression:
-      "STATE = 'CA' AND (LOCAL_TYPE='CLASS_E2' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_B' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_C' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_D' AND LOWER_VAL=0)",
+      "STATE = 'CA' AND (LOCAL_TYPE='CLASS_E2' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_B' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_C' AND LOWER_VAL=0 OR LOCAL_TYPE='CLASS_D' AND LOWER_VAL=0) AND (NAME<>'SANTA BARBARA AIRPORT CLASS E2') AND NAME<>'VAN NUYS CLASS E2' AND NAME<>'RIVERSIDE MARCH FIELD CLASS D' AND NAME<>'EDWARDS AFB CLASS E2' AND NAME<>'LANCASTER CLASS E2' AND NAME<>'BAKERSFIELD CLASS E2' AND NAME<>'LEMOORE NAS CLASS E2' AND NAME<>'MONTEREY PENINSULA AIRPORT CLASS E2' AND NAME<>'MOUNTAIN VIEW CLASS E2' AND NAME<>'SACRAMENTO EXECUTIVE AIRPORT CLASS E2'",
   });
 
+  
   var uasFacilities = new FeatureLayer({
     url:
       "https://services6.arcgis.com/ssFJjBXIUyZDrSYZ/arcgis/rest/services/FAA_UAS_FacilityMap_Data_V3/FeatureServer/0",
     outFields: ["*"],
 
-    minScale: max_Zoom_Out,
+    minScale: max_Zoom_Fac,
     maxScale: 0,
-    renderer: uasFacilitiesRenderer,
+    renderer: renderer_uasFacilities,
     labelingInfo: [UASFacilitiesLabels],
 	visible: false,
-    title: "UAS Facility Maps",
-    definitionExpression: "REGION = 'Western' ",
+    title: "UAS Facility  Maps",
+    definitionExpression: "REGION = 'Western' AND APT1_ICAO<>'KNYL' AND APT1_ICAO<>'KIFP' AND APT1_ICAO<>'KLAS' AND APT1_ICAO<>'KHND' AND APT1_ICAO<>'KVGT' AND APT1_ICAO<>'KINS' AND APT1_ICAO<>'KTPH' AND APT1_ICAO<>'KNFL' AND APT1_ICAO<>'KRNO' AND APT1_ICAO<>'KLMT' AND APT1_ICAO<>'KMFR' AND APT1_ICAO<>'KOTH' AND APT1_ICAO<>'KEUG' AND APT1_ICAO<>'KBDN' AND APT1_ICAO<>'KBNO' AND APT1_ICAO<>'KBAM' AND APT1_ICAO<>'KGXF' AND APT1_ICAO<>'KRYN' AND APT1_ICAO<>'KTUS' AND APT1_ICAO<>'KDMA' AND APT1_ICAO<>'KFHU' AND APT1_ICAO<>'KOTH' AND APT1_ICAO<>'KDUG' AND APT1_ICAO<>'KPHX' AND APT1_ICAO<>'KLUF' AND APT1_ICAO<>'KGYR' AND APT1_ICAO<>'KCHD' AND APT1_ICAO<>'KIWA' AND APT1_ICAO<>'KFFZ' AND APT1_ICAO<>'KSDL' AND APT1_ICAO<>'KDVT' AND APT1_ICAO<>'KPRC' AND APT1_ICAO<>'KGCN' AND APT1_ICAO<>'KGEU' AND APT1_ICAO<>'KFLG' AND APT1_ICAO<>'KINW' AND APT1_ICAO<>'KSGU' AND APT1_ICAO<>'KCDC' AND APT1_ICAO<>'KBCE' AND APT1_ICAO<>'KSDL' AND APT1_ICAO<>'KDVT' AND APT1_ICAO<>'KPRC' AND APT1_ICAO<>'KGCN'",
 	
-  });
-
-  var CalTransDistrictBound = new FeatureLayer({
-    url:
-      "https://gisdata.dot.ca.gov/arcgis/rest/services/Boundary/District_Tiger_Lines/MapServer/0",
-    renderer: DistrictRenderer,
-    title: "Caltrans Districts",
-    labelingInfo: [DistrictLabels],
-
-  });
-
-  var CalTransCountyBound = new FeatureLayer({
-    url:
-      "https://services.arcgis.com/BLN4oKB0N1YSgvY8/arcgis/rest/services/Counties_in_California/FeatureServer/0",
-    opacity: 0.1,
-    color: "red",
 	
   });
 
@@ -358,13 +54,43 @@ var NFZ_Renderer = {
       "https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/UAS_Test_Sites/FeatureServer",
 	  
     outFields: ["*"],
-	title: "Caltrans Drone Flying Sites",
+	title: "Flight Practice Sites",
+	//definitionExpression: "OwnerType <> 'Caltrans' ",
+	renderer: renderer_site,
 	
-	popupTemplate: {
+	popupTemplate: {		
 		title: "{Name}",
-		content: "<b>Owner:</b> {Owner}<br><b>Access:</b> {Access}<br><b>Notes:</b> {Notes}",
+		content: [
+			{
+				type: "text",
+				text: "<b>Owner:</b> {Owner}<br><b>Access:</b> {Access}<br><b>Size:</b> {Size}<br><b>Notes: </b> {Notes} <br><br><b>Site good for:</b>",
+			},
+			{
+				type: "fields",
+				fieldInfos: [
+					{fieldName: "expression/simpletest"},
+					{fieldName: "expression/performancetest"},
+					{fieldName: "expression/begtraining"},
+					{fieldName: "expression/pilottest"},
+					{fieldName: "expression/advtest"},
+					{fieldName: "expression/mission"}
+				]
+			}
+		],
+		expressionInfos:arcadeExpressionInfos
 	},
+	
   });
+
+  var CalTransDistrictBound = new FeatureLayer({
+    url:
+      "https://gisdata.dot.ca.gov/arcgis/rest/services/Boundary/District_Tiger_Lines/MapServer/0",
+    renderer: renderer_District,
+    title: "Caltrans Districts",
+    labelingInfo: [DistrictLabels],
+
+  });
+
 
   var FAA_NS_NFZ = new FeatureLayer({
     url:
@@ -372,8 +98,7 @@ var NFZ_Renderer = {
     outFields: ["*"],
 
     visible: true,
-    renderer: NFZ_Renderer,
-    opacity: 0.8,
+    renderer: renderer_NFZ,
     minScale: max_Zoom_Out,
     maxScale: 0,
     listMode: "hide",
@@ -392,7 +117,6 @@ var NFZ_Renderer = {
 	 minScale: max_Zoom_Out,
      maxScale: 0,
 	 renderer: NFS_Renderer,
-	 labelingInfo: [NFS_Labels],
 	 definitionExpression: "REGION = '05'",
 	 popupTemplate: {
 		 title: "{FORESTNAME}",
@@ -405,7 +129,7 @@ var NFZ_Renderer = {
 	 minScale: max_Zoom_Out,
 	 maxScale: 0,
 	 listMode: "hide",
-	 renderer: NFZ_Renderer,
+	 renderer: renderer_NFZ,
 	 popupTemplate: {
 		 title: "DISNEYLAND",
 		 content: "<b>FAA No Fly Zone</b><br><b>Reason: </b>Disneyland TFR<br><b>Request Authorization</b>: <a href='HTTP://WWW.TSA.GOV/STAKEHOLDERS/AIRSPACE-WAIVERS-0' target='_blank'>HTTP://WWW.TSA.GOV/STAKEHOLDERS/AIRSPACE-WAIVERS-0</a>"
