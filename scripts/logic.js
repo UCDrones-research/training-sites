@@ -1,7 +1,7 @@
 /* ################   User Interaction   ################*/
 function actionToggle(i) {
-	if (i.target.innerHTML == "unfold_less") {
-		i.target.innerHTML = "unfold_more";
+	if (i.target.innerHTML == "unfold_more") {
+		i.target.innerHTML = "unfold_less";
 		switch(i.target.id) {
 			case 'expand_layers':
 				document.getElementById("content_layers").style.display = 'inherit';
@@ -11,6 +11,8 @@ function actionToggle(i) {
 				break;
 			case 'expand_filter':
 				document.getElementById("content_filter").style.display = 'inherit';
+				document.getElementById("sites-filter").style.display = 'inherit';
+
 				break;
 			case 'expand_info':
 				document.getElementById("content_info").style.display = 'inherit';
@@ -21,7 +23,7 @@ function actionToggle(i) {
 		  }
 	} else {
 		//if its open close
-		i.target.innerHTML = "unfold_less";
+		i.target.innerHTML = "unfold_more";
 		switch(i.target.id) {
 			case 'expand_layers':
 				document.getElementById("content_layers").style.display = 'none';
@@ -31,6 +33,7 @@ function actionToggle(i) {
 				break;
 			case 'expand_filter':
 				document.getElementById("content_filter").style.display = 'none';
+				document.getElementById("sites-filter").style.display = 'none';
 				break;
 			case 'expand_info':
 				document.getElementById("content_info").style.display = 'none';
@@ -50,6 +53,7 @@ window.onload = function () {
 		if (this.innerHTML == "close") {
 			this.innerHTML = "menu_open";
 			gridLayout.style.gridTemplateRows = "60px auto 0%";
+			dri
 		} else {
 			//if its open close
 			this.innerHTML = "close";
