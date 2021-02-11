@@ -103,6 +103,10 @@ body {
   justify-content: space-between;
 }
 
+.showmore {
+  
+}
+
 .cardcontent {
 	display: none;
 }
