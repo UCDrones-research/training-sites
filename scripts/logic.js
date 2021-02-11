@@ -1,15 +1,26 @@
 /* ################   User Interaction   ################*/
+function actionToggle(i) {
+	console.log(i.target);
+}
 
-function layerToggle() {
-    // Get the checkbox
-    var checkBox = document.getElementById("classAir");
-    // Get the output text
-    var text = document.getElementById("text");
+window.onload = function () {
+	//menu button action
+	var menuAction = document.getElementById("actionmenu");
+	var gridLayout = document.getElementById("main");
+	menuAction.addEventListener("click", function () {
+		if (this.innerHTML == "close") {
+			this.innerHTML = "menu_open";
+			gridLayout.style.gridTemplateRows = "60px auto 0%";
+		} else {
+			//if its open close
+			this.innerHTML = "close";
+			gridLayout.style.gridTemplateRows = "60px auto 25%";
+		}
+	});
+
+	var btns = document.getElementsByClassName("cardheader");
+
+	// Add our event listeners
+  window.addEventListener("click", actionToggle, false);
   
-    // If the checkbox is checked, display the output text
-    if (checkBox.checked == true){
-      text.style.display = "block";
-    } else {
-      text.style.display = "none";
-    }
-  }
+};

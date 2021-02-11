@@ -1,106 +1,165 @@
 <!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="initial-scale=1, maximum-scale=1, user-scalable=no"
+		/>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="initial-scale=1, maximum-scale=1, user-scalable=no"
-    />
+		<title>California Drone Training Sites</title>
+		<!-- favicon -->
+		<link rel="icon" href="../icons/drone.svg" />
 
-    <title>Drone Training Sites</title>
+		<!--Arcgis Stylesheet-->
+		<link
+			rel="stylesheet"
+			href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+		/>
+		<!-- Google Material Icons -->
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<link href="css/materialicons.css" rel="stylesheet" />
 
-    <!--Arcgis Stylesheet-->
-    <link
-      rel="stylesheet"
-      href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
-    />
-    <!-- Google Icons -->
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
-    />
+		<!--Custom Stylesheet-->
+		<link href="css/style.css" rel="stylesheet" />
 
-    <!--Custom Stylesheet-->
-    <link href="css/style.css" rel="stylesheet" />
-    <script src="https://js.arcgis.com/4.17/"></script>
+		<!-- ArcGis API -->
+		<script src="https://js.arcgis.com/4.17/"></script>
 
-    <!-- Map Javascript Content -->
-	<script type="text/javascript" src="scripts/symbols.js"></script>
-	<script type="text/javascript" src="scripts/labels.js"></script>
-	<script type="text/javascript" src="scripts/renderers.js"></script>
-	<script type="text/javascript" src="scripts/arcade.js"></script>
-    <script type="text/javascript" src="scripts/map.js"></script>
+		<!-- Map Javascript Content -->
+		<script type="text/javascript" src="scripts/symbols.js"></script>
+		<script type="text/javascript" src="scripts/labels.js"></script>
+		<script type="text/javascript" src="scripts/renderers.js"></script>
+		<script type="text/javascript" src="scripts/arcade.js"></script>
+		<script type="text/javascript" src="scripts/map.js"></script>
 
-    <!-- Logic Javascript Content -->
-    <script type="text/javascript" src="scripts/logic.js"></script>
-  </head>
-
-  <body>
-    
-
-    <div id="content" class="wrapper">
-      <div id="header" class="top_header">
-        <img src="svg/drone-10.svg" alt="Drone Training" class="icon" />
-        <p class="h1">California Drone Training Sites</p>
-      </div>
-	   
-	  
-      <div id="Map" class="map_window"></div>
-      <div id="DashBoard" class="dash_window">
-
-        <div id="navpane">
-          <!-- Layers -->
-          <div id="navbtn" class="btnholder">
-            <button class="btn1">
-              <span class="material-icons"> layers </span>
-            </button>
-            <button class="btn1">
-              <span class="material-icons"> legend_toggle </span>
-            </button>
-            <button class="btn1">
-              <span class="material-icons"> info </span>
-            </button>
-          </div>
-		  <div id="legend"></div>
-          <div id="info"></div>
-		  
-          <div id="layers">
-
-          </div>
-		  
-		<div id="new-request">
-			<div class="small-caption">
-			Missing a good spot? Email us at <a href="mailto:UASsafety@ucmerced.edu">UASsafety@ucmerced.edu</a>
+		<!-- Logic Javascript Content -->
+		<script type="text/javascript" src="scripts/logic.js"></script>
+	</head>
+	<body>
+		<div id="main" class="wrapper">
+			<!-- START header -->
+			<div class="header">
+				<div class="container">
+					<img
+						class="dronelogo"
+						src="../icons/drone.svg"
+						alt="Drone Training"
+					/>
+					<h1>CA Drone Training Sites</h1>
+				</div>
 			</div>
-		  
-          
-
-        </div>
-        <!-- Side Pane Content -->
-      </div>
-	  <div id="sites-filter" class="esri-widget">
-              <div class="site-item visible-site" data-site="SimpleTest">
-                Simple Testing
-              </div>
-              <div class="site-item visible-site" data-site="PerformanceTest">
-                Performance Testing
-              </div>
-              <div class="site-item visible-site" data-site="BegTraining">
-                Beginning Training
-              </div>
-              <div class="site-item visible-site" data-site="PilotTest">
-                Pilot Testing
-              </div>
-              <div class="site-item visible-site" data-site="AdvTest">
-                Advanced Pilot Training
-              </div>
-        
-              <div class="site-item visible-site" data-site="PracticeMission">
-                Practice Mission
-              </div>
-            </div>
-    </div>
-    <!-- <div>Icons made by <a href="https://www.flaticon.com/authors/roundicons" title="Roundicons">Roundicons</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div> -->
-  </body>
+			<!-- END header -->
+			<!-- START map -->
+			<div id="Map" class="map">
+				<span id="actionmenu" class="material-icons md-36 float">
+					menu_open
+				</span>
+			</div>
+			<!-- END map -->
+			<!-- START sidebar -->
+			<div class="sidebar">
+				<div class="wrapperside">
+					<!-- START layer card -->
+					<div id="card-layer" class="cardpannel">
+						<div id="btnlayer" class="cardheader" data-open="0">
+							<div class="card-header-text">
+								<p></p>Layers</p>
+							</div>
+							<div class="card-header-icon">
+								<span id="actionlayers" class="material-icons md-36 b1"> layers </span>
+							</div>
+						</div>
+						<div class="cardcontent">
+							<div id="layers" class="nobg"></div>
+						</div>
+					</div>
+					<!-- END layer card -->
+					<!-- START legend card -->
+					<div id="card-legend" class="cardpannel">
+						<div id="btnlegend" class="cardheader" data-open="0">
+							<div class="card-header-text">
+								<p>Legend</p>
+							</div>
+							<div class="card-header-icon">
+								<span id="actionlegend" class="material-icons md-36 b1"> legend_toggle </span>
+							</div>
+						</div>
+						<div class="cardcontent">
+							<div id="legend" class="nobg"></div>
+						</div>
+					</div>
+					<!-- END legend card -->
+					<!-- START filter card -->
+					<div id="card-legend" class="cardpannel">
+						<div id="btnfilter" class="cardheader" data-open="0">
+							<div class="card-header-text">
+								<p>Filter</p>
+							</div>
+							<div class="card-header-icon">
+								<span id="actionfilter" class="material-icons md-36 b1"> filter_alt </span>
+							</div>
+						</div>
+						<div class="cardcontent">
+							<div id="legend" class="nobg">
+								<div id="sites-filter" class="cardcontent">
+									<div class="site-item" data-site="SimpleTest">
+										Simple Testing
+									</div>
+									<div
+										class="site-item visible-site"
+										data-site="PerformanceTest"
+									>
+										Performance Testing
+									</div>
+									<div class="site-item visible-site" data-site="BegTraining">
+										Beginning Training
+									</div>
+									<div class="site-item visible-site" data-site="PilotTest">
+										Pilot Testing
+									</div>
+									<div class="site-item visible-site" data-site="AdvTest">
+										Advanced Pilot Training
+									</div>
+									<div
+										class="site-item visible-site"
+										data-site="PracticeMission"
+									>
+										Practice Mission
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END filter card -->
+					<!-- START filter card -->
+					<div id="card-llegend" class="cardpannel">
+						<div id="btninfo" class="cardheader" data-open="0">
+							<div class="card-header-text">
+								<p>Info</p>
+							</div>
+							<div class="card-header-icon">
+								<span id="actioninfo" class="material-icons md-36 b1"> info </span>
+							</div>
+						</div>
+						<div class="cardcontent">
+							<div id="legend" class="nobg">
+									<div id="new-request">
+                    <div class="small-caption">
+                      Missing a good spot? Email us at
+                      <a href="mailto:UASsafety@ucmerced.edu">UASsafety@ucmerced.edu</a>
+                    </div>
+							</div>
+						</div>
+					</div>
+					<!-- END filter card -->
+					
+				</div>
+			</div>
+			<!-- END sidebar -->
+		</div>
+	</body>
 </html>
