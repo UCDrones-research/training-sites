@@ -77,8 +77,10 @@ window.onload = function () {
 			} else if (x == 1) {
 				//mobile landscape
 				gridLayout.style.gridTemplateRows = "60px auto 0%";
-				gridLayout.style.gridTemplateColumns = "60px auto 0%";
+				gridLayout.style.gridTemplateColumns = "60px auto";
 			} else if (x == 2) {
+				gridLayout.style.gridTemplateRows = "60px auto 0%";
+				gridLayout.style.gridTemplateColumns = "0% auto";
 			}
 		} else {
 			this.innerHTML = "close";
@@ -90,6 +92,8 @@ window.onload = function () {
 				gridLayout.style.gridTemplateRows = "60px auto 25%";
 				gridLayout.style.gridTemplateColumns = "auto 100%";
 			} else if (x == 2) {
+				gridLayout.style.gridTemplateRows = "60px auto 25%";
+				gridLayout.style.gridTemplateColumns = "auto 80%";
 			}
 		}
 	});
