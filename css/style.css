@@ -25,7 +25,7 @@ body {
 	background-size: 100% auto;
 	display: grid;
 	grid-template-rows: 60px auto 0%;
-  grid-template-columns: auto 100% 0%;
+  grid-template-columns: auto 100%;
 	grid-template-areas:
 		"header header"
 		"map map"
@@ -168,37 +168,36 @@ body {
 
 
 /* Large Screen */
-@media only screen and (min-width: 544px) {
+@media only screen and (min-width: 768px) {
 	.wrapper {
-		grid-template-columns: 17% auto;
-		grid-template-rows: 60px auto;
+    grid-template-rows: 60px auto auto;
+		grid-template-columns: 0% auto;
 		grid-template-areas:
 			"header   header"
-			"sidebar  map";
+			"sidebar  map"
+      "sidebar  map";
 	}
 }
-
-
-
-
 
 /* short height*/
 @media only screen and (max-height: 544px) {
 	.wrapper {
-		grid-template-columns: 25% auto;
-		grid-template-rows: 50px auto;
+    grid-template-rows: 40px auto auto;
+		grid-template-columns: 0% auto ;
 		grid-template-areas:
 			"header   map"
-			"sidebar  map";
+			"sidebar  map"
+      "sidebar  map";
 	}
 	.dronelogo {
-		height: 49px;
-    width: 49px;
+		height: 40px;
+    width: 40px;
 		padding: 1px;
 	}
 	.header {
-		font-size: 0px;
+		font-size: 10px;
 		font-weight: 600;
+    line-height: initial;
 		grid-area: header;
 		border-bottom-color: rgb(30, 30, 125);
 		border-bottom-style: inset;
@@ -207,6 +206,7 @@ body {
 		border-right-style: inset;
 		border-right-width: 4px;
 		text-shadow: 2px 3px 10px rgb(4, 3, 54);
+    overflow: hidden;
 	}
   .card-header-text {
     font-size: 20px;
@@ -214,21 +214,3 @@ body {
   }
 }
 
-
-/* short heigh short width */
-@media only screen and (max-height: 544px) and (max-width: 544px) {
-	.wrapper {
-		grid-template-columns: 0% 100%;
-		grid-template-rows: 100% 0%;
-		grid-template-areas:
-			"header   map"
-			"sidebar  sidebar";
-	}
-	.dronelogo {
-		height: 60px;
-		padding: 1px;
-	}
-	.header {
-		visibility: hidden;
-	}
-}
