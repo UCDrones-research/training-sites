@@ -75,7 +75,7 @@ window.onload = function () {
 				gridLayout.style.gridTemplateRows = "40px auto 0%";
 				gridLayout.style.gridTemplateColumns = "0 auto";
 			} else if (x == 1) {
-				//mobile portrait test
+				//mobile portrait
 				gridLayout.style.gridTemplateRows = "60px auto 0% 0%";
 				gridLayout.style.gridTemplateColumns = "60px auto";
 			} else if (x == 2) {
