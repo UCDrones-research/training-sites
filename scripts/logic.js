@@ -3,15 +3,14 @@ function isBreakpoint() {
 	var w = window.innerWidth;
 	var h = window.innerHeight;
 
-	if (w <= 768) {
-		if (h <= 544) {
-			//mobile landscape
-			return 0;
-		} else {
-			//mobile portrait
-			return 1;
-		}
-	} else if (h >= 544) {
+	if (h <= 544) {
+		return 0;
+		//mobile landscape
+	} else if (w <= 768) {
+		return 1;
+		//mobile portrait
+	} else {
+		//large screen
 		return 2;
 	}
 }
@@ -72,27 +71,29 @@ window.onload = function () {
 		if (this.innerHTML == "close") {
 			this.innerHTML = "menu_open";
 			if (x == 0) {
-				gridLayout.style.gridTemplateRows = "40px auto auto";
+				//mobile landscape
+				gridLayout.style.gridTemplateRows = "40px auto 0%";
 				gridLayout.style.gridTemplateColumns = "0 auto";
 			} else if (x == 1) {
-				//mobile landscape
-				gridLayout.style.gridTemplateRows = "60px auto 0%";
+				//mobile portrait
+				gridLayout.style.gridTemplateRows = "60px auto 0% 0%";
 				gridLayout.style.gridTemplateColumns = "60px auto";
 			} else if (x == 2) {
-				gridLayout.style.gridTemplateRows = "60px auto 0%";
+				//desktop
+				gridLayout.style.gridTemplateRows = "60px auto 0% 0%";
 				gridLayout.style.gridTemplateColumns = "0% auto";
 			}
 		} else {
 			this.innerHTML = "close";
 			if (x == 0) {
-				gridLayout.style.gridTemplateRows = "40px auto auto";
+				gridLayout.style.gridTemplateRows = "40px auto 0%";
 				gridLayout.style.gridTemplateColumns = "25% auto";
 			} else if (x == 1) {
 				//mobile landscape
-				gridLayout.style.gridTemplateRows = "60px auto 25%";
+				gridLayout.style.gridTemplateRows = "60px auto 25% 0%";
 				gridLayout.style.gridTemplateColumns = "auto 100%";
 			} else if (x == 2) {
-				gridLayout.style.gridTemplateRows = "60px auto 25%";
+				gridLayout.style.gridTemplateRows = "60px auto 25% 0%";
 				gridLayout.style.gridTemplateColumns = "auto 80%";
 			}
 		}

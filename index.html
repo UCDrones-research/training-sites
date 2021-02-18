@@ -39,26 +39,19 @@
 		<!-- Logic Javascript Content -->
 		<script type="text/javascript" src="scripts/logic.js"></script>
 	</head>
+
 	<body>
 		<div id="main" class="wrapper">
 			<!-- START header -->
 			<div class="header">
 				<div class="container">
-					<img
-						class="dronelogo"
-						src="./icons/drone.svg"
-						alt="Drone Training"
-					/>
+					<img class="dronelogo" src="./icons/drone.svg" alt="Drone Training" />
 					<h1>CA Drone Training Sites</h1>
 				</div>
 			</div>
 			<!-- END header -->
 			<!-- START map -->
-			<div id="Map" class="map">
-				<span id="actionmenu" class="material-icons md-36 float">
-					menu_open
-				</span>
-			</div>
+			<div id="Map" class="map"></div>
 			<!-- END map -->
 			<!-- START sidebar -->
 			<div class="sidebar">
@@ -67,11 +60,18 @@
 					<div id="card-layer" class="cardpannel">
 						<div id="btnlayer" class="cardheader" data-open="0">
 							<div class="card-header-icon">
-                <div class="card-header-info">
-                  <div class="card-header-text"> Layers</div>
-                  <div id="actionlayers" class="material-icons md-36 b1"> layers </div>
-                </div>
-                <span id="expand_layers" class="float-rel showmore material-icons md-36 b1"> unfold_more </span>
+								<div class="card-header-info">
+									<div class="card-header-text">Layers</div>
+									<div id="actionlayers" class="material-icons md-36 b1">
+										layers
+									</div>
+								</div>
+								<span
+									id="expand_layers"
+									class="float-rel showmore material-icons md-36 b1"
+								>
+									unfold_more
+								</span>
 							</div>
 						</div>
 						<div id="content_layers" class="cardcontent">
@@ -82,12 +82,19 @@
 					<!-- START legend card -->
 					<div id="card-legend" class="cardpannel">
 						<div id="btnlegend" class="cardheader" data-open="0">
-              <div class="card-header-icon">
-                <div class="card-header-info">
-                  <div class="card-header-text"> Legend </div>
-                  <div id="actionlegend" class="material-icons md-36 b1"> legend_toggle </div>
-                </div>
-                <span id="expand_legend" class="float-rel showmore material-icons md-36 b1"> unfold_more </span>
+							<div class="card-header-icon">
+								<div class="card-header-info">
+									<div class="card-header-text">Legend</div>
+									<div id="actionlegend" class="material-icons md-36 b1">
+										legend_toggle
+									</div>
+								</div>
+								<span
+									id="expand_legend"
+									class="float-rel showmore material-icons md-36 b1"
+								>
+									unfold_more
+								</span>
 							</div>
 						</div>
 						<div id="content_legend" class="cardcontent">
@@ -98,12 +105,19 @@
 					<!-- START filter card -->
 					<div id="card-legend" class="cardpannel">
 						<div id="btnfilter" class="cardheader" data-open="0">
-              <div class="card-header-icon">
-                <div class="card-header-info">
-                  <div class="card-header-text"> Filter </div>
-                  <div id="actionfilter" class="material-icons md-36 b1"> filter_alt </div>
-                </div>
-                <span id="expand_filter" class="float-rel showmore material-icons md-36 b1"> unfold_more </span>
+							<div class="card-header-icon">
+								<div class="card-header-info">
+									<div class="card-header-text">Filter</div>
+									<div id="actionfilter" class="material-icons md-36 b1">
+										filter_alt
+									</div>
+								</div>
+								<span
+									id="expand_filter"
+									class="float-rel showmore material-icons md-36 b1"
+								>
+									unfold_more
+								</span>
 							</div>
 						</div>
 						<div id="content_filter" class="">
@@ -141,29 +155,41 @@
 					<!-- START info card -->
 					<div id="card-info" class="cardpannel">
 						<div id="btninfo" class="cardheader" data-open="0">
-              <div class="card-header-icon">
-                <div class="card-header-info">
-                  <div class="card-header-text"> Info </div>
-                  <div id="actionfilter" class="material-icons md-36 b1"> info </div>
-                </div>
-                <span id="expand_info" class="float-rel showmore material-icons md-36 b1"> unfold_more </span>
+							<div class="card-header-icon">
+								<div class="card-header-info">
+									<div class="card-header-text">Info</div>
+									<div id="actionfilter" class="material-icons md-36 b1">
+										info
+									</div>
+								</div>
+								<span
+									id="expand_info"
+									class="float-rel showmore material-icons md-36 b1"
+								>
+									unfold_more
+								</span>
 							</div>
 						</div>
 						<div id="content_info" class="cardcontent">
 							<div id="legend" class="nobg">
-									<div id="new-request">
-                    <div class="small-caption">
-                      Missing a good spot? Email us at
-                      <a href="mailto:UASsafety@ucmerced.edu">UASsafety@ucmerced.edu</a>
-                    </div>
+								<div id="new-request">
+									<div class="small-caption">
+										Missing a good spot? Email us at
+										<a href="mailto:UASsafety@ucmerced.edu"
+											>UASsafety@ucmerced.edu</a
+										>
+									</div>
+								</div>
 							</div>
 						</div>
+						<!-- END info card -->
 					</div>
-					<!-- END info card -->
-					
 				</div>
 			</div>
 			<!-- END sidebar -->
+			<div class="burgermenu">
+				<span id="actionmenu" class="material-icons md-36"> menu_open </span>
+			</div>
 		</div>
 	</body>
 </html>
