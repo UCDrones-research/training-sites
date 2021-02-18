@@ -23,13 +23,12 @@ body {
 	background-attachment: fixed;
 	background-size: 100% auto;
 	display: grid;
-	grid-template-rows: 60px auto 0% 0%;
-	grid-template-columns: auto 100%;
+	grid-template-rows: 60px auto 0%;
+	grid-template-columns: 0% auto;
 	grid-template-areas:
 		"header header"
-		"map map"
-		"sidebar sidebar"
-		"burgermenu burgermenu";
+		"burgermenu map"
+		"burgermenu sidebar";
 	width: 100vw;
 	height: 100vh;
 }
@@ -117,7 +116,7 @@ body {
 	width: 36px;
 	height: 36px;
 	z-index: 10;
-	position: sticky;
+	position: fixed;
 	bottom: 10vh;
 	left: 2vh;
 	background-color: #232528;
@@ -171,11 +170,10 @@ body {
 /* Large Screen */
 @media only screen and (min-width: 768px) {
 	.wrapper {
-		grid-template-rows: 60px auto auto 0%;
+		grid-template-rows: 60px auto 0%;
 		grid-template-columns: 0% auto;
 		grid-template-areas:
 			"header   header"
-			"sidebar  map"
 			"sidebar  map"
 			"burgermenu burgermenu";
 	}
@@ -189,7 +187,7 @@ body {
 		grid-template-areas:
 			"header   header"
 			"sidebar  map"
-			"burgermenu  burgermenu";
+			"sidebar  burgermenu";
 	}
 	.dronelogo {
 		height: 40px;

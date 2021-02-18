@@ -76,22 +76,23 @@ window.onload = function () {
 				gridLayout.style.gridTemplateColumns = "0 auto";
 			} else if (x == 1) {
 				//mobile portrait
-				gridLayout.style.gridTemplateRows = "60px auto 0% 0%";
-				gridLayout.style.gridTemplateColumns = "60px auto";
+				gridLayout.style.gridTemplateRows = "60px auto 0%";
+				gridLayout.style.gridTemplateColumns = "0% auto";
 			} else if (x == 2) {
 				//desktop
-				gridLayout.style.gridTemplateRows = "60px auto 0% 0%";
+				gridLayout.style.gridTemplateRows = "60px auto 0%";
 				gridLayout.style.gridTemplateColumns = "0% auto";
 			}
 		} else {
 			this.innerHTML = "close";
 			if (x == 0) {
+				//landscape
 				gridLayout.style.gridTemplateRows = "40px auto 0%";
 				gridLayout.style.gridTemplateColumns = "25% auto";
 			} else if (x == 1) {
-				//mobile landscape
-				gridLayout.style.gridTemplateRows = "60px auto 25% 0%";
-				gridLayout.style.gridTemplateColumns = "auto 100%";
+				//portrait
+				gridLayout.style.gridTemplateRows = "60px auto 35%";
+				gridLayout.style.gridTemplateColumns = "0% auto";
 			} else if (x == 2) {
 				gridLayout.style.gridTemplateRows = "60px auto 25% 0%";
 				gridLayout.style.gridTemplateColumns = "auto 80%";
