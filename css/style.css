@@ -12,30 +12,17 @@ body {
 	width: 100vw;
 }
 
+.mainwrapper {
+	overflow: hidden;
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-flow: column nowrap;
+}
+
 .container {
 	display: flex;
 	justify-content: center;
-}
-
-.wrapper {
-	overflow: hidden;
-	background-color: #f5f5f5;
-	background-attachment: fixed;
-	background-size: 100% auto;
-	display: grid;
-	grid-template-rows: 60px auto 0%;
-	grid-template-columns: 0% auto;
-	grid-template-areas:
-		"header header"
-		"burgermenu map"
-		"burgermenu sidebar";
-	width: 100vw;
-	height: 100vh;
-}
-
-.dronelogo {
-	height: 60px;
-	padding: 2px;
 }
 
 .header {
@@ -44,30 +31,50 @@ body {
 	line-height: 60px;
 	font-size: 12px;
 	font-weight: 600;
-	grid-area: header;
-	border-bottom-color: #232528;
+	border-bottom-color: rgb(30, 30, 125);
 	border-bottom-width: 4px;
 	border-bottom-style: inset;
 	text-shadow: 2px 3px 10px rgb(4, 3, 54);
+	height: 62px;
+}
+
+.dronelogo {
+	height: 60px;
+	padding: 2px;
+}
+
+.wrapper {
+	overflow-y: hidden;
+	background-color: #f5f5f5;
+	flex: 1 0 auto;
+	display: flex;
+	flex-flow:column nowrap;
 }
 
 .map {
 	position: relative;
-	grid-area: map;
+	min-height: 50%;
+	flex: 1 0 auto;
 }
 
 .sidebar {
-	grid-area: sidebar;
 	overflow: scroll;
+	max-height: 50%;
+	flex: 0 0 auto;
 }
 
 .wrapperside {
 }
 
 .cardpannel {
+	cursor:pointer;
 	border-top-color: rgb(30, 30, 125);
 	border-top-width: 4px;
 	border-top-style: inset;
+	-webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .cardheader {
@@ -82,8 +89,8 @@ body {
 	color: #d9dbf1;
 }
 
-.cardheader:hover:active {
-	background-color: #009ffd;
+.cardheader:active {
+	background-color: #00B1B0;
 }
 
 .card-header-text {
@@ -109,14 +116,16 @@ body {
 
 .cardcontent {
 	display: none;
+	border-style: solid;
+	border-color: #00a0fd71;
+	border-width: 4px;
 }
 
 .burgermenu {
-	grid-area: burgermenu;
 	width: 36px;
 	height: 36px;
 	z-index: 10;
-	position: fixed;
+	position: absolute;
 	bottom: 10vh;
 	left: 2vh;
 	background-color: #232528;
@@ -170,43 +179,57 @@ body {
 /* Large Screen */
 @media only screen and (min-width: 768px) {
 	.wrapper {
-		grid-template-rows: 60px auto 0%;
-		grid-template-columns: 0% auto;
-		grid-template-areas:
-			"header   header"
-			"sidebar  map"
-			"burgermenu burgermenu";
+		display: flex;
+		flex-flow:row nowrap;
+		margin: 0;
 	}
+	.sidebar {
+		order: 1;
+		overflow-y: scroll;
+		max-width: min-content;
+		max-height: 97vh;
+		visibility: inherit;
+	}
+	.map {
+		order: 2;
+		min-height: 100%;
+	}	
 }
 
 /* mobile landscape*/
 @media only screen and (max-height: 544px) {
 	.wrapper {
-		grid-template-rows: 40px auto 0%;
-		grid-template-columns: 0% auto;
-		grid-template-areas:
-			"header   header"
-			"sidebar  map"
-			"sidebar  burgermenu";
+		display: flex;
+		flex-flow: row nowrap;
+		margin: 0;
 	}
 	.dronelogo {
-		height: 40px;
-		width: 40px;
+		height: 32px;
+		width: 32px;
 		padding: 1px;
 	}
 	.header {
 		font-size: 10px;
-		font-weight: 600;
 		line-height: initial;
-		grid-area: header;
-		border-bottom-color: rgb(30, 30, 125);
-		border-bottom-style: inset;
-		border-bottom-width: 4px;
-		text-shadow: 2px 3px 10px rgb(4, 3, 54);
-		overflow: hidden;
+		order: 0;
+		flex: 100%;
+		max-height: 36px;
 	}
+	.sidebar {
+		order: 1;
+		overflow-y: scroll;
+		max-width: min-content;
+		visibility: inherit;
+		max-height: 90vh;
+	}
+	.map {
+		min-height: 100%;
+		order: 2;
+	}	
+
 	.card-header-text {
 		font-size: 20px;
 		font-weight: 500;
 	}
+
 }

@@ -3,10 +3,10 @@ function isBreakpoint() {
 	var w = window.innerWidth;
 	var h = window.innerHeight;
 
-	if (h <= 544) {
+	if (h < 544) {
 		return 0;
 		//mobile landscape
-	} else if (w <= 768) {
+	} else if (w < 768) {
 		return 1;
 		//mobile portrait
 	} else {
@@ -16,93 +16,96 @@ function isBreakpoint() {
 }
 
 function actionToggle(i) {
-	if (i.target.innerHTML == "unfold_more") {
-		i.target.innerHTML = "unfold_less";
-		switch (i.target.id) {
-			case "expand_layers":
-				document.getElementById("content_layers").style.display = "inherit";
-				break;
-			case "expand_legend":
-				document.getElementById("content_legend").style.display = "inherit";
-				break;
-			case "expand_filter":
-				document.getElementById("content_filter").style.display = "inherit";
-				document.getElementById("sites-filter").style.display = "inherit";
+	var elem = i.currentTarget.id;
+	var action = $("#" + i.currentTarget.id).data("open");
 
+	console.log(elem + "\n" + action);
+	if (action == "1") {
+		switch (elem) {
+			case "btnlayer":
+				$("#content_layers").hide("slow");
+				$("#expand_layers").html("unfold_less");
 				break;
-			case "expand_info":
-				document.getElementById("content_info").style.display = "inherit";
+			case "btnlegend":
+				$("#content_legend").hide("slow");
+				$("#expand_legend").html("unfold_less");
+				break;
+			case "btnfilter":
+				$("#content_filter").hide("slow");
+				$("#sites-filter").hide("slow");
+				$("#expand_filter").html("unfold_less");
+				break;
+			case "btninfo":
+				$("#content_info").hide("slow");
+				$("#expand_info").html("unfold_less");
 				break;
 			default:
 				console.log("no attribute matches listener to class");
 			// code block
 		}
+		$("#" + elem).data("open", "0");
 	} else {
 		//if its open close
-		i.target.innerHTML = "unfold_more";
-		switch (i.target.id) {
-			case "expand_layers":
-				document.getElementById("content_layers").style.display = "none";
+		switch (elem) {
+			case "btnlayer":
+				$("#content_layers").show("slow");
+				$("#expand_layers").html("unfold_more");
 				break;
-			case "expand_legend":
-				document.getElementById("content_legend").style.display = "none";
+			case "btnlegend":
+				$("#content_legend").show("slow");
+				$("#expand_legend").html("unfold_more");
 				break;
-			case "expand_filter":
-				document.getElementById("content_filter").style.display = "none";
-				document.getElementById("sites-filter").style.display = "none";
+			case "btnfilter":
+				$("#content_filter").show("slow");
+				$("#sites-filter").show("slow");
+				$("#expand_filter").html("unfold_more");
 				break;
-			case "expand_info":
-				document.getElementById("content_info").style.display = "none";
+			case "btninfo":
+				$("#content_info").show("slow");
+				$("#expand_info").html("unfold_more");
 				break;
 			default:
 				console.log("no attribute matches listener to class");
 			// code block
 		}
+		$("#" + elem).data("open", "1");
 	}
 }
 
-window.onload = function () {
-	//menu button action
-	var menuAction = document.getElementById("actionmenu");
-	var gridLayout = document.getElementById("main");
-	menuAction.addEventListener("click", function () {
+$(document).ready(function () {
+	$("#actionmenu").bind("click", function () {
 		var x = isBreakpoint();
-		console.log(x);
+
 		if (this.innerHTML == "close") {
 			this.innerHTML = "menu_open";
 			if (x == 0) {
 				//mobile landscape
-				gridLayout.style.gridTemplateRows = "40px auto 0%";
-				gridLayout.style.gridTemplateColumns = "0 auto";
+				document.getElementById("sidebarmenu").style.display = "none";
 			} else if (x == 1) {
 				//mobile portrait
-				gridLayout.style.gridTemplateRows = "60px auto 0%";
-				gridLayout.style.gridTemplateColumns = "0% auto";
+				document.getElementById("sidebarmenu").style.display = "none";
 			} else if (x == 2) {
 				//desktop
-				gridLayout.style.gridTemplateRows = "60px auto 0%";
-				gridLayout.style.gridTemplateColumns = "0% auto";
+				document.getElementById("sidebarmenu").style.display = "none";
 			}
-		} else {
+		} else if (this.innerHTML == "menu_open") {
 			this.innerHTML = "close";
 			if (x == 0) {
 				//landscape
-				gridLayout.style.gridTemplateRows = "40px auto 0%";
-				gridLayout.style.gridTemplateColumns = "25% auto";
+				document.getElementById("sidebarmenu").style.display = "block";
 			} else if (x == 1) {
 				//portrait
-				gridLayout.style.gridTemplateRows = "60px auto 35%";
-				gridLayout.style.gridTemplateColumns = "0% auto";
+				document.getElementById("sidebarmenu").style.display = "block";
 			} else if (x == 2) {
-				gridLayout.style.gridTemplateRows = "60px auto 25% 0%";
-				gridLayout.style.gridTemplateColumns = "auto 80%";
+				document.getElementById("sidebarmenu").style.display = "block";
 			}
+		} else {
+			this.innerHTML = "menu_open";
+			document.getElementById("sidebarmenu").style.display = "none";
 		}
 	});
 
-	document.querySelectorAll(".showmore").forEach((item) => {
-		item.addEventListener("click", (event) => {
-			actionToggle(event);
-		});
+	$(".cardheader").bind("click", function (e) {
+		actionToggle(e);
 	});
-};
+});
