@@ -116,9 +116,12 @@ body {
 
 .cardcontent {
 	display: none;
-	border-style: solid;
-	border-color: #00a0fd71;
-	border-width: 4px;
+	border-left-width: 4px;
+	border-left-style: solid;
+	border-left-color:  #000000;
+	border-right-width: 4px;
+	border-right-style: solid;
+	border-right-color:  #000000;
 }
 
 .burgermenu {
@@ -127,7 +130,7 @@ body {
 	z-index: 10;
 	position: absolute;
 	bottom: 10vh;
-	left: 2vh;
+	left: 1vh;
 	background-color: #232528;
 	border-radius: 10px;
 	color: #d9dbf1;
@@ -174,6 +177,23 @@ body {
 
 .esri-layer-list__item {
 	background: rgba(255, 255, 255, 0);
+}
+
+.p{
+	padding: 10px;
+	background-color: #afffff57;
+	border-style: solid;
+	border-color: #001f1f;
+	border-width: 2px;
+}
+
+.small-caption{
+	border-style: solid;
+	border-color: #000000;
+	border-width: 2px;
+	text-align: center;
+	font-style: italic;
+	font-weight: 800;
 }
 
 /* Large Screen */

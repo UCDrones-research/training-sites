@@ -1,183 +1,269 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta
+			name="viewport"
+			content="initial-scale=1, maximum-scale=1, user-scalable=no"
+		/>
 
-<head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+		<title>California Drone Training Sites</title>
+		<!-- favicon -->
+		<link rel="icon" href="icons/drone.svg" />
 
-	<title>California Drone Training Sites</title>
-	<!-- favicon -->
-	<link rel="icon" href="icons/drone.svg" />
+		<!--Arcgis Stylesheet-->
+		<link
+			rel="stylesheet"
+			href="https://js.arcgis.com/4.17/esri/themes/light/main.css"
+		/>
+		<!-- Google Material Icons -->
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<link href="./css/materialicons.css" rel="stylesheet" />
 
-	<!--Arcgis Stylesheet-->
-	<link rel="stylesheet" href="https://js.arcgis.com/4.17/esri/themes/light/main.css" />
-	<!-- Google Material Icons -->
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-	<link href="./css/materialicons.css" rel="stylesheet" />
+		<!--Custom Stylesheet-->
+		<link href="./css/style.css" rel="stylesheet" />
 
-	<!--Custom Stylesheet-->
-	<link href="./css/style.css" rel="stylesheet" />
+		<!-- jQuery -->
+		<script
+			src="https://code.jquery.com/jquery-3.5.1.min.js"
+			integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+			crossorigin="anonymous"
+		></script>
 
-	<!-- jQuery -->
-	<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-		integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+		<!-- ArcGis API -->
+		<script src="https://js.arcgis.com/4.17/"></script>
 
-	<!-- ArcGis API -->
-	<script src="https://js.arcgis.com/4.17/"></script>
+		<!-- Map Javascript Content -->
+		<script type="text/javascript" src="scripts/symbols.js"></script>
+		<script type="text/javascript" src="scripts/labels.js"></script>
+		<script type="text/javascript" src="scripts/renderers.js"></script>
+		<script type="text/javascript" src="scripts/arcade.js"></script>
+		<script type="text/javascript" src="scripts/map.js"></script>
 
-	<!-- Map Javascript Content -->
-	<script type="text/javascript" src="scripts/symbols.js"></script>
-	<script type="text/javascript" src="scripts/labels.js"></script>
-	<script type="text/javascript" src="scripts/renderers.js"></script>
-	<script type="text/javascript" src="scripts/arcade.js"></script>
-	<script type="text/javascript" src="scripts/map.js"></script>
+		<!-- Logic Javascript Content -->
+		<script type="text/javascript" src="scripts/logic.js"></script>
+	</head>
 
-	<!-- Logic Javascript Content -->
-	<script type="text/javascript" src="scripts/logic.js"></script>
-</head>
-
-<body>
-	<div id="main" class="mainwrapper">
-		<!-- START header -->
-		<div class="header">
-			<div class="container">
-				<img class="dronelogo" src="./icons/drone.svg" alt="Drone Training" />
-				<h1>CA Drone Training Sites</h1>
-			</div>
-		</div>
-		<!-- END header -->
-		<div id="sidebar-map" class="wrapper">
-			<!-- START map -->
-			<div id="Map" class="map">
-				<div class="burgermenu">
-					<span id="actionmenu" class="material-icons md-36">
-						close
-					</span>
+	<body>
+		<div id="main" class="mainwrapper">
+			<!-- START header -->
+			<div class="header">
+				<div class="container">
+					<img
+						class="dronelogo"
+						src="./icons/drone.svg"
+						alt="Drone Training"
+					/>
+					<h1>CA Drone Training Sites</h1>
 				</div>
 			</div>
-			<!-- END map -->
-			<!-- START sidebar -->
-			<div id="sidebarmenu" class="sidebar">
-				<div class="wrapperside">
-					<!-- START layer card -->
-					<div id="card-layer" class="cardpannel">
-						<div id="btnlayer" class="cardheader" data-open="0">
-							<div class="card-header-icon">
-								<div class="card-header-info">
-									<div class="card-header-text">
-										Layers
-									</div>
-									<div id="actionlayers" class="material-icons md-36 b1">
-										layers
-									</div>
-								</div>
-								<span id="expand_layers" class="float-rel showmore material-icons md-36 b1">
-									unfold_more
-								</span>
-							</div>
-						</div>
-						<div id="content_layers" class="cardcontent">
-							<div id="layers" class="nobg"></div>
-						</div>
-					</div>
-					<!-- END layer card -->
-					<!-- START legend card -->
-					<div id="card-legend" class="cardpannel">
-						<div id="btnlegend" class="cardheader" data-open="0">
-							<div class="card-header-icon">
-								<div class="card-header-info">
-									<div class="card-header-text">
-										Legend
-									</div>
-									<div id="actionlegend" class="material-icons md-36 b1">
-										legend_toggle
-									</div>
-								</div>
-								<span id="expand_legend" class="float-rel showmore material-icons md-36 b1">
-									unfold_more
-								</span>
-							</div>
-						</div>
-						<div id="content_legend" class="cardcontent">
-							<div id="legend" class="nobg"></div>
-						</div>
-					</div>
-					<!-- END legend card -->
-					<!-- START filter card -->
-					<div id="card-filter" class="cardpannel">
-						<div id="btnfilter" class="cardheader" data-open="0">
-							<div class="card-header-icon">
-								<div class="card-header-info">
-									<div class="card-header-text">
-										Filter
-									</div>
-									<div id="actionfilter" class="material-icons md-36 b1">
-										filter_alt
-									</div>
-								</div>
-								<span id="expand_filter" class="float-rel showmore material-icons md-36 b1">
-									unfold_more
-								</span>
-							</div>
-						</div>
-						<div id="content_filter" class="">
-							<div id="legend" class="nobg">
-								<div id="sites-filter" class="cardcontent">
-									<div class="site-item" data-site="SimpleTest">
-										Simple Testing
-									</div>
-									<div class="site-item visible-site" data-site="PerformanceTest">
-										Performance Testing
-									</div>
-									<div class="site-item visible-site" data-site="BegTraining">
-										Beginning Training
-									</div>
-									<div class="site-item visible-site" data-site="PilotTest">
-										Pilot Testing
-									</div>
-									<div class="site-item visible-site" data-site="AdvTest">
-										Advanced Pilot Training
-									</div>
-									<div class="site-item visible-site" data-site="PracticeMission">
-										Practice Mission
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- END filter card -->
-					<!-- START info card -->
-					<div id="card-info" class="cardpannel">
-						<div id="btninfo" class="cardheader" data-open="0">
-							<div class="card-header-icon">
-								<div class="card-header-info">
-									<div class="card-header-text">Info</div>
-									<div id="actionfilter" class="material-icons md-36 b1">
-										info
-									</div>
-								</div>
-								<span id="expand_info" class="float-rel showmore material-icons md-36 b1">
-									unfold_more
-								</span>
-							</div>
-						</div>
-						<div id="content_info" class="cardcontent">
-							<div id="legend" class="nobg">
-								<div id="new-request">
-									<div class="small-caption">
-										Missing a good spot? Email us at
-										<a href="mailto:UASsafety@ucmerced.edu">UASsafety@ucmerced.edu</a>
-									</div>
-								</div>
-							</div>
-						</div>
-						<!-- END info card -->
+			<!-- END header -->
+			<div id="sidebar-map" class="wrapper">
+				<!-- START map -->
+				<div id="Map" class="map">
+					<div class="burgermenu">
+						<span id="actionmenu" class="material-icons md-36">
+							close
+						</span>
 					</div>
 				</div>
+				<!-- END map -->
+				<!-- START sidebar -->
+				<div id="sidebarmenu" class="sidebar">
+					<div class="wrapperside">
+						<!-- START layer card -->
+						<div id="card-layer" class="cardpannel">
+							<div id="btnlayer" class="cardheader" data-open="0">
+								<div class="card-header-icon">
+									<div class="card-header-info">
+										<div class="card-header-text">
+											Layers
+										</div>
+										<div
+											id="actionlayers"
+											class="material-icons md-36 b1"
+										>
+											layers
+										</div>
+									</div>
+									<span
+										id="expand_layers"
+										class="float-rel showmore material-icons md-36 b1"
+									>
+										unfold_more
+									</span>
+								</div>
+							</div>
+							<div id="content_layers" class="cardcontent">
+								<div id="layers" class="nobg"></div>
+							</div>
+						</div>
+						<!-- END layer card -->
+						<!-- START legend card -->
+						<div id="card-legend" class="cardpannel">
+							<div
+								id="btnlegend"
+								class="cardheader"
+								data-open="0"
+							>
+								<div class="card-header-icon">
+									<div class="card-header-info">
+										<div class="card-header-text">
+											Legend
+										</div>
+										<div
+											id="actionlegend"
+											class="material-icons md-36 b1"
+										>
+											legend_toggle
+										</div>
+									</div>
+									<span
+										id="expand_legend"
+										class="float-rel showmore material-icons md-36 b1"
+									>
+										unfold_more
+									</span>
+								</div>
+							</div>
+							<div id="content_legend" class="cardcontent">
+								<div id="legend" class="nobg"></div>
+							</div>
+						</div>
+						<!-- END legend card -->
+						<!-- START filter card -->
+						<div id="card-filter" class="cardpannel">
+							<div
+								id="btnfilter"
+								class="cardheader"
+								data-open="0"
+							>
+								<div class="card-header-icon">
+									<div class="card-header-info">
+										<div class="card-header-text">
+											Filter
+										</div>
+										<div
+											id="actionfilter"
+											class="material-icons md-36 b1"
+										>
+											filter_alt
+										</div>
+									</div>
+									<span
+										id="expand_filter"
+										class="float-rel showmore material-icons md-36 b1"
+									>
+										unfold_more
+									</span>
+								</div>
+							</div>
+							<div id="content_filter" class="">
+								<div id="legend" class="nobg">
+									<div id="sites-filter" class="cardcontent">
+										<div
+											class="site-item"
+											data-site="SimpleTest"
+										>
+											Simple Testing
+										</div>
+										<div
+											class="site-item visible-site"
+											data-site="PerformanceTest"
+										>
+											Performance Testing
+										</div>
+										<div
+											class="site-item visible-site"
+											data-site="BegTraining"
+										>
+											Beginning Training
+										</div>
+										<div
+											class="site-item visible-site"
+											data-site="PilotTest"
+										>
+											Pilot Testing
+										</div>
+										<div
+											class="site-item visible-site"
+											data-site="AdvTest"
+										>
+											Advanced Pilot Training
+										</div>
+										<div
+											class="site-item visible-site"
+											data-site="PracticeMission"
+										>
+											Practice Mission
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- END filter card -->
+						<!-- START info card -->
+						<div id="card-info" class="cardpannel">
+							<div id="btninfo" class="cardheader" data-open="0">
+								<div class="card-header-icon">
+									<div class="card-header-info">
+										<div class="card-header-text">Info</div>
+										<div
+											id="actionfilter"
+											class="material-icons md-36 b1"
+										>
+											info
+										</div>
+									</div>
+									<span
+										id="expand_info"
+										class="float-rel showmore material-icons md-36 b1"
+									>
+										unfold_more
+									</span>
+								</div>
+							</div>
+							<div id="content_info" class="cardcontent">
+								<div id="legend" class="nobg">
+									<div class="p">
+										<p>
+											California Drone Training Sites is a
+											WebApp project developed by the
+											department of UAS Safety at UC
+											Merced in collaboration with
+											Caltrans.
+										</p>
+									</div>
+									<div class="p">
+										<p>
+											The purpose of this web app is to
+											provide an interactive database
+											containing a collection of possible
+											training sites for flying drones. In
+											addition to displaying drone
+											training sites, other regulatory
+											data has been added.
+										</p>
+									</div>
+								</div>
+							</div>
+							<!-- END info card -->
+						</div>
+					</div>
+					<div class="message" id="new-request">
+						<div class="small-caption">
+							Missing a good spot? Email us at
+							<a href="mailto:UASsafety@ucmerced.edu"
+								>UASsafety@ucmerced.edu</a
+							>
+						</div>
+					</div>
+				</div>
+				<!-- END sidebar -->
 			</div>
-			<!-- END sidebar -->
 		</div>
-	</div>
-</body>
-
+	</body>
 </html>
