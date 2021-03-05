@@ -1,4 +1,6 @@
 /* ################   User Interaction   ################*/
+var generalDtxt;
+
 function isBreakpoint() {
 	var w = window.innerWidth;
 	var h = window.innerHeight;
@@ -15,6 +17,16 @@ function isBreakpoint() {
 	}
 }
 
+function toggleDiv($element) {
+
+	if ($("#GeneralDiscP").html() == "General Disclaimer:")
+		$("#GeneralDiscP").html(generalDtxt);
+	else {
+		$("#GeneralDiscP").html("General Disclaimer:");
+	}
+
+}
+
 function actionToggle(i) {
 	var elem = i.currentTarget.id;
 	var action = $("#" + i.currentTarget.id).data("open");
@@ -23,20 +35,20 @@ function actionToggle(i) {
 	if (action == "1") {
 		switch (elem) {
 			case "btnlayer":
-				$("#content_layers").hide("slow");
+				$("#content_layers").hide("normal");
 				$("#expand_layers").html("unfold_less");
 				break;
 			case "btnlegend":
-				$("#content_legend").hide("slow");
+				$("#content_legend").hide("normal");
 				$("#expand_legend").html("unfold_less");
 				break;
 			case "btnfilter":
-				$("#content_filter").hide("slow");
-				$("#sites-filter").hide("slow");
+				$("#content_filter").hide("normal");
+				//$("#sites-filter").hide("slow");
 				$("#expand_filter").html("unfold_less");
 				break;
 			case "btninfo":
-				$("#content_info").hide("slow");
+				$("#content_info").hide("normal");
 				$("#expand_info").html("unfold_less");
 				break;
 			default:
@@ -48,20 +60,21 @@ function actionToggle(i) {
 		//if its open close
 		switch (elem) {
 			case "btnlayer":
-				$("#content_layers").show("slow");
+				$("#content_layers").show("normal");
 				$("#expand_layers").html("unfold_more");
 				break;
 			case "btnlegend":
-				$("#content_legend").show("slow");
+				$("#content_legend").show("normal");
 				$("#expand_legend").html("unfold_more");
+				progress(10, 10, $('#progressBar'));
 				break;
 			case "btnfilter":
-				$("#content_filter").show("slow");
-				$("#sites-filter").show("slow");
+				$("#content_filter").show("normal");
+				$("#sites-filter").show("normal");
 				$("#expand_filter").html("unfold_more");
 				break;
 			case "btninfo":
-				$("#content_info").show("slow");
+				$("#content_info").show("normal");
 				$("#expand_info").html("unfold_more");
 				break;
 			default:
@@ -71,6 +84,24 @@ function actionToggle(i) {
 		$("#" + elem).data("open", "1");
 	}
 }
+
+function progress(timeleft, timetotal, $element) {
+	$element.show('normal');
+	$("#GeneralDiscP").html(generalDtxt);
+	var progressBarWidth = timeleft * $element.width() / timetotal;
+	$element.find('div').animate({ width: progressBarWidth }, 500);
+    // $element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(timeleft/60) + ":"+ timeleft%60);
+	if (timeleft > 0) {
+		setTimeout(function () {
+			
+			progress(timeleft - 1, timetotal, $element);
+			
+		}, 1000);
+	} else if (timeleft == 0) {
+		$element.hide('normal');
+		$("#GeneralDiscP").html("General Disclaimer:");
+	}
+};
 
 $(document).ready(function () {
 	$("#actionmenu").bind("click", function () {
@@ -108,4 +139,18 @@ $(document).ready(function () {
 	$(".cardheader").bind("click", function (e) {
 		actionToggle(e);
 	});
+
+	$("#generaldiscdiv").bind("click", function (e) {
+		toggleDiv(e);
+	});
+
+	$.ajax({
+		url : "generaldisclaimer.txt",
+		dataType: "text",
+		success : function (data) {
+			generalDtxt = data;
+		}
+	});
+
+
 });
