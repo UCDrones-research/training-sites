@@ -26,7 +26,7 @@ var color_site = [	[100, 199, 255],
 				//[42, 57, 175]
 var color_caltrans = [255, 255, 255];
 				
-var marker_size = "16px";
+var marker_size = "20px";
 
 var sym_ClassE = {
 	type: "simple-fill",
@@ -129,7 +129,7 @@ var sym_FAA_RF = {
 	type: "simple-marker", 
 	style: "circle",
 	color: color_site[0],
-	size: "10px",  
+	size: "16px",  
 	outline: {  
 		color: [0, 0, 0 ],
 		width: 2,  
@@ -202,3 +202,21 @@ var sym_CT = {
 	}
 }
 
+
+var sym_city_regs = {
+	type: "simple-fill",
+	color: [ 200, 200, 0, 0.10 ],
+	outline: { 
+		width: 2,
+		color: "black"
+	}
+}
+
+var sym_county_regs = {
+	type: "simple-fill",
+	color: [ 0, 200, 200, 0.10],
+	outline: { 
+		width: 2,
+		color: "black"
+	}
+}

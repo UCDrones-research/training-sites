@@ -71,6 +71,7 @@ function actionToggle(i) {
 			case "btnfilter":
 				$("#content_filter").show("normal");
 				$("#sites-filter").show("normal");
+				
 				$("#expand_filter").html("unfold_more");
 				break;
 			case "btninfo":

@@ -29,5 +29,11 @@ var arcadeExpressionInfos = [
 		title: "Practice Missions",
 		expression: "if($feature.PracticeMission==1){return 'Yes'} else {return 'No'}"
 	},
+	{
+		name: "clear",
+		title: "Clear Filter",
+		expression: "if($feature.ClearFilter==1){return 'Yes'} else {return 'No'}"
+	},
+
   
   ];

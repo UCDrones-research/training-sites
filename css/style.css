@@ -152,7 +152,7 @@ body {
 }
 
 #sites-filter {
-	
+	width: 100%;
 }
 
 .site-item {
@@ -224,10 +224,6 @@ body {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
-}
-
-#legend {
-	display: flex;
 }
 
 

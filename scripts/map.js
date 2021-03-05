@@ -74,7 +74,7 @@ require([
 				{
 					type: "text",
 					text:
-						"<b>Owner:</b> {Owner}<br><b>Access:</b> {Access}<br><b>Size:</b> {Size}<br><b>Notes: </b> {Notes} <br><br><b>Site good for:</b>",
+						"<b>Owner:</b> {Owner}<br><b>Access:</b> {Access}<br><b>Size:</b> {Size}<br><b>Notes: </b> {Notes} <br><br><b></b> <a href='{Link}'>Link</a> <br><br><b>Site good for:</b>",
 				},
 				{
 					type: "fields",
@@ -199,6 +199,86 @@ require([
 		},
 	});
 
+	var CA_city_regs1 = new FeatureLayer({
+		url:
+			"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/CA_UAS_Regulations/FeatureServer/0",
+		outFields: ["*"],
+		title: "CA City Regulations",
+		minScale: max_Zoom_Out,
+		maxScale: 0,
+		renderer: renderer_city,
+		definitionExpression: "DroneReg = 1",
+		popupTemplate: {
+			title: "{NAME}",
+			content:
+				"<b>Caution City Regulations Exist</b><br><b>Please review: </b><br> - {Drone_Sec} - <a href='{Drone_Code}' target='_blank'>Source</a><br><b>Summary: </b>{Notes}<br><b>Last Reviewed: </b>{LastUpdate}",
+		},
+	});
+
+	var CA_city_regs2 = new FeatureLayer({
+		url:
+			"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/CA_UAS_Regulations/FeatureServer/0",
+		outFields: ["*"],
+		title: "CA City Regulations",
+		minScale: max_Zoom_Out,
+		maxScale: 0,
+		renderer: renderer_city,
+		definitionExpression: "DroneReg = 2",
+		popupTemplate: {
+			title: "{NAME}",
+			content:
+				"<b>Caution City Regulations Exist</b><br><b>Please review: </b><br> - {Drone_Sec} - <a href='{Drone_Code}' target='_blank'>Source</a><br> - {Drone_Sec2} - <a href='{Drone_Code2}' target='_blank'>Source</a><br><b>Summary: </b>{Notes}<br><b>Last Reviewed: </b>{LastUpdate}",
+		},
+	});
+
+	var CA_county_regs1 = new FeatureLayer({
+		url:
+			"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/CA_UAS_Regulations/FeatureServer/1",
+		outFields: ["*"],
+		title: "CA County Regulations",
+		minScale: max_Zoom_Out,
+		maxScale: 0,
+		renderer: renderer_county,
+		definitionExpression: "DroneReg = 1",
+		popupTemplate: {
+			title: "{NAME} County",
+			content:
+				"<b>Caution County Regulations Exist</b><br><b>Please review: </b><br> - {Drone_Sec} - <a href='{Drone_Code}' target='_blank'>Source</a><br><b>Summary: </b>{Notes}<br><b>Last Reviewed: </b>{LastUpdate}",
+		},
+	});
+
+	var CA_county_regs2 = new FeatureLayer({
+		url:
+			"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/CA_UAS_Regulations/FeatureServer/1",
+		outFields: ["*"],
+		title: "CA County Regulations",
+		minScale: max_Zoom_Out,
+		maxScale: 0,
+		renderer: renderer_county,
+		definitionExpression: "DroneReg = 2",
+		popupTemplate: {
+			title: "{NAME} County",
+			content:
+				"<b>Caution County Regulations Exist</b><br><b>Please review: </b><br> - {Drone_Sec} - <a href='{Drone_Code}' target='_blank'>Source</a><br> - {Drone_Sec2} - <a href='{Drone_Code2}' target='_blank'>Source</a><br><b>Summary: </b>{Notes}<br><b>Last Reviewed: </b>{LastUpdate}",
+		},
+	});
+
+	var CA_county_regs3 = new FeatureLayer({
+		url:
+			"https://services2.arcgis.com/wx8u046p68e0iGuj/arcgis/rest/services/CA_UAS_Regulations/FeatureServer/1",
+		outFields: ["*"],
+		title: "CA County Regulations",
+		minScale: max_Zoom_Out,
+		maxScale: 0,
+		renderer: renderer_county,
+		definitionExpression: "DroneReg = 3",
+		popupTemplate: {
+			title: "{NAME} County",
+			content:
+				"<b>Caution County Regulations Exist</b><br><b>Please review: </b><br> - {Drone_Sec} - <a href='{Drone_Code}' target='_blank'>Source</a><br> - {Drone_Sec2} - <a href='{Drone_Code2}' target='_blank'>Source</a><br> - {Drone_Sec} - <a href='{Drone_Code}' target='_blank'>Source</a><br><b>Summary: </b>{Notes}<br><b>Last Reviewed: </b>{LastUpdate}",
+		},
+	});
+
 	var publicGroupLayers = new GroupLayer({
 		title: "Public Lands",
 		visible: false,
@@ -220,13 +300,37 @@ require([
 		layers: [classAirspace, uasFacilities],
 	});
 
+	var CA_county = new GroupLayer({
+		title: "CA County Regulations",
+		visibility: true,
+		visibilityMode: "inherited",
+		listMode: "hide-children",
+		layers: [CA_county_regs1, CA_county_regs2, CA_county_regs3],
+	});
+
+	var CA_city = new GroupLayer({
+		title: "CA City Regulations",
+		visibility: true,
+		visibilityMode: "inherited",
+		listMode: "hide-children",
+		layers: [CA_city_regs1, CA_city_regs2],
+	});
+
+	var CA_State_Local_Regs = new GroupLayer({
+		title: "CA Local Regulations",
+		visible: true,
+		visibilityMode: "independent",
+		blendMode: "normal",
+		layers: [CA_city, CA_county],
+	});
+
 	var map = new Map({
 		basemap: "gray",
 		layers: [
 			CalTransDistrictBound,
 			publicGroupLayers,
 			airspaceGroupLayers,
-
+			CA_State_Local_Regs,
 			FAA_NS_NFZ,
 			DL_NOTAM,
 			flyingsitesGroupLayers,
@@ -269,7 +373,7 @@ require([
 
 	var layerList = new LayerList({
 		view: view,
-		container: "layers"
+		container: "layers",
 	});
 
 	//Do some things after everything has loaded
@@ -287,8 +391,8 @@ require([
 					layer: UASTestSite,
 					title: "Identified Flying Sites",
 				},
-      ],
-      container: "legend"
+			],
+			container: "legend",
 		});
 		//view.ui.add(legend, "top-right");
 	}, 2000);

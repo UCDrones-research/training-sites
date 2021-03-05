@@ -21,7 +21,7 @@ var renderer_classAirspace = {
 	  },
 	],
 };
-
+ 
 var renderer_site = {
 	type: "unique-value",
 	field: "OwnerType",
@@ -90,4 +90,15 @@ var FAA_RF_Renderer = {
 var NFS_Renderer = {
 	type: "simple",
 	symbol: sym_NFS,
+};
+
+
+var renderer_city = {
+	type: "simple",
+	symbol: sym_city_regs,
+};
+
+var renderer_county = {
+	type: "simple",
+	symbol: sym_county_regs,
 };
