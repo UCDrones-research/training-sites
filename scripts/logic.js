@@ -89,6 +89,7 @@ function actionToggle(i) {
 function progress(timeleft, timetotal, $element) {
 	$element.show('normal');
 	$("#GeneralDiscP").html(generalDtxt);
+	
 	var progressBarWidth = timeleft * $element.width() / timetotal;
 	$element.find('div').animate({ width: progressBarWidth }, 500);
     // $element.find('div').animate({ width: progressBarWidth }, 500).html(Math.floor(timeleft/60) + ":"+ timeleft%60);
@@ -101,6 +102,7 @@ function progress(timeleft, timetotal, $element) {
 	} else if (timeleft == 0) {
 		$element.hide('normal');
 		$("#GeneralDiscP").html("General Disclaimer:");
+		
 	}
 };
 
