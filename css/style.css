@@ -53,14 +53,13 @@ body {
 
 .map {
 	position: relative;
-	min-height: 50%;
-	flex: 1 0 auto;
+	min-height: 55%;
+	flex: 1 1 0;
 }
 
 .sidebar {
 	overflow: scroll;
-	max-height: 50%;
-	flex: 0 0 auto;
+	flex: 1 1 0;
 }
 
 .wrapperside {
@@ -239,7 +238,7 @@ body {
 		order: 1;
 		overflow-y: scroll;
 		width: 19vw;
-		min-width: min-content;
+		max-width: 19vw;
 		max-height: 97vh;
 		visibility: inherit;
 	}

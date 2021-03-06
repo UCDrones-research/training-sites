@@ -66,7 +66,6 @@ function actionToggle(i) {
 			case "btnlegend":
 				$("#content_legend").show("normal");
 				$("#expand_legend").html("unfold_more");
-				progress(10, 10, $('#progressBar'));
 				break;
 			case "btnfilter":
 				$("#content_filter").show("normal");
@@ -107,6 +106,10 @@ function progress(timeleft, timetotal, $element) {
 };
 
 $(document).ready(function () {
+
+	//load general diclaimer
+	progress(20, 20, $('#progressBar'));
+
 	$("#actionmenu").bind("click", function () {
 		var x = isBreakpoint();
 
