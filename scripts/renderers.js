@@ -47,6 +47,10 @@ var renderer_site = {
 	  {
 		  value: "Caltrans",
 		  symbol: sym_CT,
+	  },
+	  	  {
+		  value: "Federal",
+		  symbol: sym_CT,
 	  }
 	],
 };
